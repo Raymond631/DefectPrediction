@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from sklearn import metrics
-from mdp_random import data_handle,plot_roc
+from xuezhang.model.randm.mdp_random import data_handle,plot_roc
 import joblib
 import numpy as np
 import matplotlib.pyplot as plt

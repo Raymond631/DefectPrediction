@@ -8,7 +8,7 @@ from imblearn.under_sampling import RandomUnderSampler
 from sklearn.model_selection import StratifiedKFold #分层k折交叉验证
 import math
 from sklearn import metrics
-from mdp_random import data_handle
+from xuezhang.model.randm.mdp_random import data_handle
 import matplotlib.pyplot as plt
 import matplotlib as mpl
 

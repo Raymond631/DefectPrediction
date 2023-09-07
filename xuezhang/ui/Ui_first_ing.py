@@ -2,12 +2,12 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
-from mdp_random import data_handle,plot_roc,random_forest
-from mdp_dnn import nerual_network
-from test_random import test_random,random_result
-from test_dnn import test_network,dnn_result
+from xuezhang.model.randm.mdp_random import data_handle,plot_roc,random_forest
+from xuezhang.model.dnn.mdp_dnn import nerual_network
+from xuezhang.model.randm.test_random import test_random,random_result
+from xuezhang.model.dnn.test_dnn import test_network,dnn_result
 from childWindow import  *
-from knn import test
+from xuezhang.model.knn.knn import test
 
 class Ui_Form(QWidget):
 

@@ -4,7 +4,7 @@ from sklearn.metrics import auc,roc_curve,accuracy_score,classification_report,p
 from sklearn.model_selection import StratifiedKFold #分层k折交叉验证
 import math
 import joblib
-from  mdp_random import data_handle,plot_roc
+from  xuezhang.model.randm.mdp_random import data_handle,plot_roc
 from sklearn import metrics
 import matplotlib.pyplot as plt
 from collections import Counter
