@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
-import pandas as pd
-import numpy as np
-from sklearn.neural_network import MLPClassifier
-import joblib
-from sklearn.metrics import auc,roc_curve,accuracy_score,classification_report,precision_score,recall_score,f1_score
-from imblearn.under_sampling import RandomUnderSampler
-from sklearn.model_selection import StratifiedKFold #分层k折交叉验证
 import math
-from sklearn import metrics
-from xuezhang.model.randm.mdp_random import data_handle
-import matplotlib.pyplot as plt
-import matplotlib as mpl
 
-def plot_roc(labels, predict_prob,auca,preci,recall,f1,auc_ave,g_mean_ave,balance_ave):
+import joblib
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import numpy as np
+from imblearn.under_sampling import RandomUnderSampler
+from sklearn import metrics
+from sklearn.metrics import auc, roc_curve, accuracy_score, classification_report, precision_score, recall_score, f1_score
+from sklearn.model_selection import StratifiedKFold  # 分层k折交叉验证
+from sklearn.neural_network import MLPClassifier
+
+from xuezhang.model.randm.mdp_random import data_handle
+
+
+def plot_roc(labels, predict_prob, auca, preci, recall, f1, auc_ave, g_mean_ave, balance_ave):
     # 创建一个1行2列的画布
     figure, axes = plt.subplots(ncols=1, nrows=3, figsize=(7.5, 8), dpi=100)
     # 绘图对象
@@ -22,16 +24,16 @@ def plot_roc(labels, predict_prob,auca,preci,recall,f1,auc_ave,g_mean_ave,balanc
 
     # 选择ax1
     plt.sca(ax1)
-    false_positive_rate,true_positive_rate,thresholds=roc_curve(labels, predict_prob)
-    roc_auc=auc(false_positive_rate, true_positive_rate)
-    #print('AUC='+str(roc_auc))
+    false_positive_rate, true_positive_rate, thresholds = roc_curve(labels, predict_prob)
+    roc_auc = auc(false_positive_rate, true_positive_rate)
+    # print('AUC='+str(roc_auc))
     plt.title('PC5-ROC')
-    plt.plot(false_positive_rate, true_positive_rate,'b',label='AUC = %0.4f'% roc_auc)
+    plt.plot(false_positive_rate, true_positive_rate, 'b', label='AUC = %0.4f' % roc_auc)
     plt.legend(loc='lower right')
-    plt.plot([0,1],[0,1],'r--')
+    plt.plot([0, 1], [0, 1], 'r--')
     plt.ylabel('TPR（真阳性率）')
     plt.xlabel('FPR（伪阳性率）')
-    #plt.savefig('figures/PC5.png')
+    # plt.savefig('figures/PC5.png')
 
     # 选择ax2
     plt.sca(ax2)
@@ -70,6 +72,7 @@ def plot_roc(labels, predict_prob,auca,preci,recall,f1,auc_ave,g_mean_ave,balanc
     table.scale(1.5, 1.5)
     plt.show()
 
+
 def nerual_network():
     datasets, labels = data_handle('MDP/KC3.csv')  # 对数据集进行处理
     '''
@@ -78,12 +81,12 @@ def nerual_network():
     print(len(x_test))
     '''
     accuracy_list = []
-    precision_list=[]
-    recall_list=[]
-    f1_list=[]
-    auc_list=[]
-    g_mean_list=[]
-    balance_list=[]
+    precision_list = []
+    recall_list = []
+    f1_list = []
+    auc_list = []
+    g_mean_list = []
+    balance_list = []
 
     # kf=KFold(n_splits=10)
     kf = StratifiedKFold(n_splits=10, shuffle=True)
@@ -145,22 +148,23 @@ def nerual_network():
     preci = np.mean(precision_list)
     recall = np.mean(recall_list)
     f1 = np.mean(f1_list)
-    #收敛标准
+    # 收敛标准
     auc_ave = np.mean(auc_list)
     g_mean_ave = np.mean(g_mean_list)
     balance_ave = np.mean(balance_list)
-    print('平均准确率:', np.mean(accuracy_list)) #准确率
-    print('平均精确率:', np.mean(precision_list)) #精确率
-    print('平均召回率:', np.mean(recall_list)) #召回率
+    print('平均准确率:', np.mean(accuracy_list))  # 准确率
+    print('平均精确率:', np.mean(precision_list))  # 精确率
+    print('平均召回率:', np.mean(recall_list))  # 召回率
     print('平均f1值:', np.mean(f1_list))
     # 收敛标准，一般大于0.7时采纳模型
     print('auc_ave:', np.mean(auc_list))
     print('g_mean_ave:', np.mean(g_mean_list))
     print('balance_ave:', np.mean(balance_list))
 
-    print('混淆矩阵输出:\n',metrics.confusion_matrix(y_test,pre))#混淆矩阵输出
+    print('混淆矩阵输出:\n', metrics.confusion_matrix(y_test, pre))  # 混淆矩阵输出
 
-    plot_roc(y_test, pre,auca,preci,recall,f1,auc_ave,g_mean_ave,balance_ave)  #绘制ROC曲线并求出AUC值
+    plot_roc(y_test, pre, auca, preci, recall, f1, auc_ave, g_mean_ave, balance_ave)  # 绘制ROC曲线并求出AUC值
+
 
 if __name__ == '__main__':
     nerual_network()
