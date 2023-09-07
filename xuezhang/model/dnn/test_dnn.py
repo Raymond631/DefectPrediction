@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-import numpy as np
-from sklearn.metrics import auc,roc_curve,accuracy_score,classification_report,precision_score,recall_score,f1_score
-from sklearn.model_selection import StratifiedKFold #分层k折交叉验证
-import math
-import joblib
-from  xuezhang.model.randm.mdp_random import data_handle,plot_roc
-from sklearn import metrics
-import matplotlib.pyplot as plt
 from collections import Counter
+
+import joblib
+import matplotlib.pyplot as plt
+import numpy as np
+from sklearn.model_selection import StratifiedKFold  # 分层k折交叉验证
+
+from xuezhang.model.randm.mdp_random import data_handle
+
 
 def test_network():
     datasets, labels = data_handle('MDP/KC3.csv')  # 对数据集进行处理
@@ -19,6 +19,7 @@ def test_network():
         pre = clf.predict(x_test)
     np.savetxt('network_result.txt', pre)
     print(pre)
+
 
 # 画饼状图
 def dnn_result():
@@ -41,6 +42,7 @@ def dnn_result():
     plt.pie(values, explode=explode, labels=label, autopct='%1.1f%%')  # 绘制饼图
     plt.title('缺陷数目')
     plt.show()
+
 
 if __name__ == '__main__':
     test_network()
