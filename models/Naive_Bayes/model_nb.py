@@ -1,12 +1,15 @@
+import os
+
+import matplotlib as mpl
 import matplotlib.pyplot as plt
+import pandas as pd
+from scipy.io import arff
 from sklearn import metrics
-from sklearn.metrics import auc, roc_curve, accuracy_score, classification_report, precision_score, recall_score, f1_score
+from sklearn.metrics import auc, classification_report
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
-from xuezhang.model.randm.mdp_random import data_handle
-import matplotlib as mpl
-import os
-import glob
+from sklearn.preprocessing import LabelEncoder
+
 
 def plot_roc(labels, predict_prob, auc, macro, macro_recall, weighted):
     # 创建一个1行2列的画布
@@ -48,20 +51,26 @@ def plot_roc(labels, predict_prob, auc, macro, macro_recall, weighted):
     # plt.savefig('figures/PC5.png') #将ROC图片进行保存
 
 
+def naive_Bayes(folder_path):
+    # 获取目录下的所有ARFF文件
+    arff_files = [f for f in os.listdir(folder_path) if f.endswith('.arff')]
+    combined_data = pd.DataFrame()
 
-if __name__ == '__main__':
-    # data = arff.loadarff('../../data/arff/AEEEM/EQ.arff')
-    # df = pd.DataFrame(data[0])
-    # X = df.iloc[:, :-1].values
-    # y = df.iloc[:, -1].values
-    # 输入数据的修改
-    directory_path = '../../data/csv/AEEEM'
-    # 使用 glob.glob 获取目录下所有 CSV 文件的路径列表
-    csv_files = glob.glob(os.path.join(directory_path, '*.csv'))
-    # 打印所有 CSV 文件的路径
-    for file in csv_files:
-        print(file)
-    X, y = data_handle('../../data/csv/AEEEM/LC.csv')
+    for filename in arff_files:
+        file_path = os.path.join(folder_path, filename)
+        # 从ARFF文件加载数据
+        data, meta = arff.loadarff(file_path)
+        df = pd.DataFrame(data)
+        # 将数据添加到合并的数据集中
+        combined_data = pd.concat([combined_data, df], ignore_index=True)
+    # 使用LabelEncoder将字符串目标变量转换为数值
+    label_encoder = LabelEncoder()
+    combined_data['class'] = label_encoder.fit_transform(combined_data['class'])
+    class_labels = [label.decode('utf-8') for label in label_encoder.classes_]  # 保存原始的枚举类型标签
+
+    # 分割数据为特征 (X) 和目标变量 (y)
+    X = combined_data.iloc[:, :-1]
+    y = combined_data['class']
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
@@ -81,8 +90,12 @@ if __name__ == '__main__':
     print(clf.predict(X_test[:1]))
     print("预计的概率值:", y_proba)
 
-    print('分类报告：', classification_report(y_test, y_pred))
-    plot_roc(y_test, y_pred, auc, macro, macro_recall, weighted)   # 绘制ROC曲线并求出AUC值
+    print('分类报告：', classification_report(y_test, y_pred, target_names=class_labels))
+    plot_roc(y_test, y_pred, auc, macro, macro_recall, weighted)  # 绘制ROC曲线并求出AUC值
     print('结果')
     print(y_test)
     print(y_pred)
+
+
+if __name__ == '__main__':
+    naive_Bayes('../../data/arff/AEEEM')
