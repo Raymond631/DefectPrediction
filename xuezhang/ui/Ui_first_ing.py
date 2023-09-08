@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
 
-from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
-from xuezhang.model.randm.mdp_random import data_handle,plot_roc,random_forest
+
+from childWindow import *
 from xuezhang.model.dnn.mdp_dnn import nerual_network
-from xuezhang.model.randm.test_random import test_random,random_result
-from xuezhang.model.dnn.test_dnn import test_network,dnn_result
-from childWindow import  *
+from xuezhang.model.dnn.test_dnn import test_network, dnn_result
 from xuezhang.model.knn.knn import test
+from xuezhang.model.randm.mdp_random import random_forest
+from xuezhang.model.randm.test_random import test_random, random_result
+
 
 class Ui_Form(QWidget):
 
     def __init__(self):
-        super(Ui_Form,self).__init__()
+        super(Ui_Form, self).__init__()
         self.setupUi(self)
         self.retranslateUi(self)
 
@@ -149,22 +150,24 @@ class Ui_Form(QWidget):
             test_network()
 
     def openfile(self):
-        openfile_name, filetype = QFileDialog.getOpenFileName(self,'选择文件', "/", "All Files (*);;Excel files (*.xlsx , *.xls , *.csv)")
+        openfile_name, filetype = QFileDialog.getOpenFileName(self, '选择文件', "/", "All Files (*);;Excel files (*.xlsx , *.xls , *.csv)")
         self.label_6.setText(openfile_name)
 
     def openfile2(self):
-        openfile_name, filetype = QFileDialog.getOpenFileName(self,'选择文件', "/", "All Files (*);;Excel files (*.xlsx , *.xls , *.csv)")
+        openfile_name, filetype = QFileDialog.getOpenFileName(self, '选择文件', "/", "All Files (*);;Excel files (*.xlsx , *.xls , *.csv)")
         self.label_7.setText(openfile_name)
+
 
 if __name__ == "__main__":
     import sys
+
     app = QtWidgets.QApplication(sys.argv)
-    #实例化主窗口
+    # 实例化主窗口
     Widgets = QtWidgets.QWidget()
     ui = Ui_Form()
     ui.setupUi(Widgets)
 
-    #实例化子窗口
+    # 实例化子窗口
     child = QDialog()
     child_ui = Ui_Dialog()
     child_ui.setupUi(child)
@@ -174,4 +177,3 @@ if __name__ == "__main__":
     btn.clicked.connect(child.show)
     Widgets.show()
     sys.exit(app.exec_())
-
