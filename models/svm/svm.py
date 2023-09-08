@@ -51,7 +51,7 @@ def svm(folder_path):
 
 
 if __name__ == '__main__':
-    svm('../../data/AEEEM')
+    svm('../../data/arff/AEEEM')
     # data_path = "../../data"
     # # 所有数据集
     # data_sets = [f for f in os.listdir(data_path)]
