@@ -12,7 +12,7 @@ from sklearn.svm import SVC
 
 
 def plot_roc(labels, predict_prob, auc, macro, macro_recall, weighted):
-    # 创建一个1行2列的画布
+    # 创建一个1行2列的画b布
     figure, axes = plt.subplots(ncols=1, nrows=2, figsize=(6.5, 6.5), dpi=100)
     # 绘图对象
     ax1 = axes[0]

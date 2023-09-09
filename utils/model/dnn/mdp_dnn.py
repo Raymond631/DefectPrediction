@@ -169,7 +169,6 @@ def nerual_network():
     print('auc_ave:', np.mean(auc_list))
     print('g_mean_ave:', np.mean(g_mean_list))
     print('balance_ave:', np.mean(balance_list))
-
     print('混淆矩阵输出:\n', metrics.confusion_matrix(y_test, pre))  # 混淆矩阵输出
 
     plot_roc(y_test, pre, auca, preci, recall, f1, auc_ave, g_mean_ave, balance_ave)  # 绘制ROC曲线并求出AUC值
