@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
+import glob
 import math
+import os
 
 import joblib
 import matplotlib as mpl
@@ -11,7 +13,7 @@ from sklearn.metrics import auc, roc_curve, accuracy_score, classification_repor
 from sklearn.model_selection import StratifiedKFold  # 分层k折交叉验证
 from sklearn.neural_network import MLPClassifier
 
-from xuezhang.model.randm.mdp_random import data_handle
+from utils.model.randm.mdp_random import data_handle
 
 
 def plot_roc(labels, predict_prob, auca, preci, recall, f1, auc_ave, g_mean_ave, balance_ave):
@@ -74,7 +76,13 @@ def plot_roc(labels, predict_prob, auca, preci, recall, f1, auc_ave, g_mean_ave,
 
 
 def nerual_network():
-    datasets, labels = data_handle('MDP/KC3.csv')  # 对数据集进行处理
+    # 指定目标目录的路径
+    directory_path = '/path/to/your/directory'  # 替换成你的目录路径
+
+    # 使用 glob.glob 获取目录下所有 CSV 文件的路径列表
+    csv_files = glob.glob(os.path.join(directory_path, '*.csv'))
+
+    datasets, labels = data_handle('../../../data/csv/SOFTLAB/ar1.csv')  # 对数据集进行处理
     '''
     x_train,x_test,y_train,y_test = train_test_split(datasets,labels,test_size=0.1,random_state=0) #数据集划分
     print(len(x_train))
@@ -92,20 +100,21 @@ def nerual_network():
     kf = StratifiedKFold(n_splits=10, shuffle=True)
     for train_index, test_index in kf.split(datasets[:], labels[:]):
         rus = RandomUnderSampler(sampling_strategy=1, random_state=0, replacement=True)  # 采用随机欠采样（下采样）
-        x_retest, y_retest = rus.fit_sample(datasets[:], labels[:])
+        x_retest, y_retest = rus.fit_resample(datasets[:], labels[:])
         x_train = x_retest
         y_train = y_retest
         x_test = np.array(datasets)[test_index]
         y_test = np.array(labels)[test_index]
 
-        clf = MLPClassifier(hidden_layer_sizes=(200), activation='tanh', solver='sgd', alpha=0.001,
+        clf = MLPClassifier(hidden_layer_sizes=(50,20), activation='tanh', solver='sgd', alpha=0.001,
                             batch_size=5, learning_rate='constant', learning_rate_init=0.01, power_t=0.5, max_iter=200,
                             shuffle=True, random_state=None, tol=0.0001, verbose=False, warm_start=False, momentum=0.9,
                             nesterovs_momentum=True, early_stopping=False, validation_fraction=0.1, beta_1=0.9,
                             beta_2=0.999, epsilon=1e-08, n_iter_no_change=10)
 
         clf.fit(x_train, y_train)
-        joblib.dump(clf, "./files/dnn.pkl")
+        joblib.dump(clf, "../../../files/dnn.pkl")
+
         '''
         print(clf.n_iter_)
         print(clf.n_layers_)
@@ -160,7 +169,6 @@ def nerual_network():
     print('auc_ave:', np.mean(auc_list))
     print('g_mean_ave:', np.mean(g_mean_list))
     print('balance_ave:', np.mean(balance_list))
-
     print('混淆矩阵输出:\n', metrics.confusion_matrix(y_test, pre))  # 混淆矩阵输出
 
     plot_roc(y_test, pre, auca, preci, recall, f1, auc_ave, g_mean_ave, balance_ave)  # 绘制ROC曲线并求出AUC值

@@ -29,7 +29,7 @@ def data_handle(filename):
         list_datasets.append(list_data)  # 将每个样本的数据存入列表
 
         row_data_label = read_data.iloc[i, len(read_data.iloc[i, :]) - 1]  # 读取每个样本的类别标签
-        if row_data_label == 'N':
+        if row_data_label == 'buggy':
             category_labels.append(0)  # 将二分类标签转化为0和1,0代表软件正常，1代表软件缺陷
         else:
             category_labels.append(1)
