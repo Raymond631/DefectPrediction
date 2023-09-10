@@ -19,8 +19,8 @@ def arff2csv(arff_path, csv_path=None, _encoding='utf8'):
 
 if __name__ == '__main__':
 
-    input_file = './Relink/ar6.arff'
-    output_file= './SOFTLAB/ar6.csv'
+    input_file = './data/arff/MDP/D1/PC5.arff'
+    output_file= 'data/csv/MDP/D1/PC5.csv'
     args, _ = getopt.getopt(sys.argv[1:], "i:o:")
 
     for o, a in args:

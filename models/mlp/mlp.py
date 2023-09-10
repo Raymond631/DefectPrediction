@@ -69,7 +69,7 @@ def plot_roc(labels, predict_prob, auca, preci, recall, f1, auc_ave, g_mean_ave,
     table.set_fontsize(14)
     table.scale(1.5, 1.5)
     plt.show()
-
+# 文件夹下合并数据集处理
 def dataset_process(directory_path):
     csv_files=glob.glob(os.path.join(directory_path, '*.csv'))
     combined_data = pd.DataFrame()
@@ -77,18 +77,18 @@ def dataset_process(directory_path):
         df = pd.read_csv(csv_file)  # 请替换 'your_file.csv' 为你的文件路径
         # 将数据添加到合并的数据集中
         combined_data = pd.concat([combined_data, df], ignore_index=True)
-
-    labels = combined_data.iloc[:, -1]
+    labels = combined_data.iloc[:, -1].replace({"N": 0, "Y": 1})
     features = combined_data.iloc[:, :-1]
-    modified_labels = [0 if label == "buggy" else 1 for label in labels]
-    labels=pd.DataFrame(modified_labels,columns=['defects'])
     return features,labels
-
-
+# 单个csv数据集文件处理
+def data_process(file_path):
+    df = pd.read_csv(file_path)
+    features = df.iloc[:, :-1]
+    labels = df.iloc[:, -1].replace({"N": 0, "Y": 1})
+    return features, labels
 def multilayer_perceptron():
-    # 指定目标目录的路径
-    directory_path = '../../data/csv/AEEEM'  # 替换成你的目录路径
-    features,labels = dataset_process(directory_path)
+    directory_path = '../../data/csv/MDP/D1/PC5.csv'
+    features,labels = data_process(directory_path)
     print(type(features))
     print(type(labels))
     # 使用随机欠采样
@@ -99,8 +99,8 @@ def multilayer_perceptron():
     kf = StratifiedKFold(n_splits=10, shuffle=True)
 
     # 定义mlp的分类器
-    clf = MLPClassifier(hidden_layer_sizes=(10,1), activation='tanh', solver='sgd', alpha=0.001,
-                        batch_size=5, learning_rate='constant', learning_rate_init=0.03, power_t=0.5, max_iter=200,
+    clf = MLPClassifier(hidden_layer_sizes=(8,4,2), activation='tanh', solver='sgd', alpha=0.001,
+                        batch_size=5, learning_rate='constant', learning_rate_init=0.01, power_t=0.5, max_iter=200,
                         shuffle=True, random_state=None, tol=0.0001, verbose=False, warm_start=False, momentum=0.9,
                         nesterovs_momentum=True, early_stopping=False, validation_fraction=0.1, beta_1=0.9,
                         beta_2=0.999, epsilon=1e-08, n_iter_no_change=10)
