@@ -17,7 +17,6 @@ def plot_roc(labels, predict_prob, auc, macro, macro_recall, weighted):
     # 绘图对象
     ax1 = axes[0]
     ax2 = axes[1]
-
     # 选择ax1
     plt.sca(ax1)
     false_positive_rate, true_positive_rate, thresholds = metrics.roc_curve(labels, predict_prob)  # 真阳性，假阳性，阈值
@@ -51,8 +50,7 @@ def plot_roc(labels, predict_prob, auc, macro, macro_recall, weighted):
     # plt.savefig('figures/PC5.png') #将ROC图片进行保存
 
 
-def svm(folder_path):
-    # 获取目录下的所有ARFF文件
+def data_pre_processing(folder_path):
     arff_files = [f for f in os.listdir(folder_path) if f.endswith('.arff')]
     combined_data = pd.DataFrame()
 
@@ -63,7 +61,6 @@ def svm(folder_path):
         df = pd.DataFrame(data)
         # 将数据添加到合并的数据集中
         combined_data = pd.concat([combined_data, df], ignore_index=True)
-
     # 使用LabelEncoder将字符串目标变量转换为数值
     label_encoder = LabelEncoder()
     combined_data['class'] = label_encoder.fit_transform(combined_data['class'])
@@ -72,12 +69,16 @@ def svm(folder_path):
     # 分割数据为特征 (X) 和目标变量 (y)
     X = combined_data.iloc[:, :-1]
     y = combined_data['class']
+    return X, y, class_labels
 
+
+def svm(folder_path):
+    X, y, class_labels = data_pre_processing(folder_path)
     # 将数据分割为训练集和测试集
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     # 创建SVM分类器
-    svm_classifier = SVC(kernel='polynomial')  # 可以用不同的核函数,如'linear'、'rbf'、'sigmoid'、等
+    svm_classifier = SVC(kernel='rbf')  # 可以用不同的核函数,如'linear'、'rbf'、'sigmoid'、等
 
     # 训练模型
     svm_classifier.fit(X_train, y_train)
@@ -93,7 +94,7 @@ def svm(folder_path):
     micro = metrics.precision_score(y_test, y_pred, average='micro')
     macro_recall = metrics.recall_score(y_test, y_pred, average='macro')
     weighted = metrics.f1_score(y_test, y_pred, average='weighted')
-
+    print(macro)
     # 打印分类报告
     print(classification_report(y_test, y_pred, target_names=class_labels))
 
@@ -102,12 +103,13 @@ def svm(folder_path):
 
 
 if __name__ == '__main__':
+    print('svm')
     svm('../../data/arff/AEEEM')
     # data_path = "../../data"
     # # 所有数据集
     # data_sets = [f for f in os.listdir(data_path)]
     # # 分别使用各个数据集
-    # for data_set in data_sets:
+    # for data_set in data_sets:0
     #     print(f'数据集：{data_set}')
     #     svm(os.path.join(data_path, data_set))
     #     print('-----------------------------')

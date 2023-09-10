@@ -51,8 +51,8 @@ def plot_roc(labels, predict_prob, auc, macro, macro_recall, weighted):
     # plt.savefig('figures/PC5.png') #将ROC图片进行保存
 
 
-def naive_Bayes(folder_path):
-    # 获取目录下的所有ARFF文件
+# 数据预处理
+def data_pre_processing(folder_path):
     arff_files = [f for f in os.listdir(folder_path) if f.endswith('.arff')]
     combined_data = pd.DataFrame()
 
@@ -71,7 +71,11 @@ def naive_Bayes(folder_path):
     # 分割数据为特征 (X) 和目标变量 (y)
     X = combined_data.iloc[:, :-1]
     y = combined_data['class']
+    return X, y, class_labels
 
+
+def naive_Bayes(folder_path):
+    X, y, class_labels = data_pre_processing(folder_path)
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
     # 创建并训练分类器
@@ -92,10 +96,8 @@ def naive_Bayes(folder_path):
 
     print('分类报告：', classification_report(y_test, y_pred, target_names=class_labels))
     plot_roc(y_test, y_pred, auc, macro, macro_recall, weighted)  # 绘制ROC曲线并求出AUC值
-    print('结果')
-    print(y_test)
-    print(y_pred)
 
 
 if __name__ == '__main__':
+    print('nb')
     naive_Bayes('../../data/arff/AEEEM')
