@@ -1,4 +1,6 @@
-import sys, getopt
+import getopt
+import sys
+
 
 def arff2csv(arff_path, csv_path=None, _encoding='utf8'):
     with open(arff_path, 'r', encoding=_encoding) as fr:
@@ -17,10 +19,11 @@ def arff2csv(arff_path, csv_path=None, _encoding='utf8'):
                     attributes.append(line.split()[1])  # @attribute attribute_tag numeric
     print("Convert {} to {}.".format(arff_path, csv_path))
 
+
 if __name__ == '__main__':
 
-    input_file = './data/arff/MDP/D1/PC5.arff'
-    output_file= 'data/csv/MDP/D1/PC5.csv'
+    input_file = '../data/arff/MDP/D1/PC5.arff'
+    output_file = '../data/csv/MDP/D1/PC5.csv'
     args, _ = getopt.getopt(sys.argv[1:], "i:o:")
 
     for o, a in args:
