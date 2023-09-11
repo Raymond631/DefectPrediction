@@ -1,10 +1,7 @@
 from collections import Counter
 import joblib
 import matplotlib.pyplot as plt
-import numpy as np
 from sklearn.metrics import accuracy_score
-from sklearn.model_selection import StratifiedKFold
-
 from models.mlp.mlp import data_process, dataset_process
 
 

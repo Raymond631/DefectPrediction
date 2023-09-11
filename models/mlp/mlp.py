@@ -99,7 +99,7 @@ def dataset_process(directory_path):
 def data_process(file_path):
     df = pd.read_csv(file_path)
     features = df.iloc[:, :-1]
-    labels = df.iloc[:, -1].replace({"buggy": 0, "clean": 1})
+    labels = df.iloc[:, -1].replace({"N": 0, "Y": 1})
     return features, labels
 def multilayer_perceptron():
     directory_path = '../../data/csv/MORPH'
@@ -114,9 +114,9 @@ def multilayer_perceptron():
     kf = StratifiedKFold(n_splits=10, shuffle=True)
 
     # 定义mlp的分类器
-    clf = MLPClassifier(hidden_layer_sizes=(20,80,40,20,10,8,1), activation='tanh', solver='sgd', alpha=0.001,
-                        batch_size=5, learning_rate='constant', learning_rate_init=0.01, power_t=0.5, max_iter=200,
-                        shuffle=True, random_state=None, tol=0.0001, verbose=False, warm_start=False, momentum=0.9,
+    clf = MLPClassifier(hidden_layer_sizes=(40, 80, 60, 40, 20, 10, 5, 2, 1), activation='tanh', solver='lbfgs',
+                        alpha=0.001, batch_size=50, learning_rate='adaptive', learning_rate_init=0.03, power_t=0.5, max_iter=200,
+                        shuffle=True, random_state=42, tol=0.0001, verbose=True, warm_start=True, momentum=0.9,
                         nesterovs_momentum=True, early_stopping=False, validation_fraction=0.1, beta_1=0.9,
                         beta_2=0.999, epsilon=1e-08, n_iter_no_change=10)
 
