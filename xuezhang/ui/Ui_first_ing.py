@@ -3,11 +3,11 @@
 from PyQt5.QtWidgets import *
 
 from childWindow import *
-from utils.model.dnn.mdp_dnn import nerual_network
-from utils.model.dnn.test_dnn import test_network, dnn_result
-from utils.model.knn.knn import test
-from utils.model.randm.mdp_random import random_forest
-from utils.model.randm.test_random import test_random, random_result
+from xuezhang.model.dnn.mdp_dnn import nerual_network
+from xuezhang.model.dnn.test_dnn import test_network, dnn_result
+from xuezhang.model.knn.knn import test
+from xuezhang.model.randm.mdp_random import random_forest
+from xuezhang.model.randm.test_random import test_random, random_result
 
 
 class Ui_Form(QWidget):

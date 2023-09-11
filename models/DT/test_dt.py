@@ -1,9 +1,9 @@
 # 单个arff数据集文件处理
 import os
 
-import arff
 import numpy as np
 import pandas as pd
+from scipy.io import arff
 
 
 def read_arff_file(file_path):
@@ -13,6 +13,7 @@ def read_arff_file(file_path):
     labels = data_array[:, -1]
     labels = np.where(labels == b'N', 0, 1)
     return features, labels
+
 
 def folder_arff(folder_path):
     arff_files = [f for f in os.listdir(folder_path) if f.endswith('.arff')]
@@ -25,4 +26,4 @@ def folder_arff(folder_path):
     combined_data.iloc[:, -1] = combined_data.iloc[:, -1].apply(lambda x: 0 if x == b'N' else 1)
     X = combined_data.iloc[:, :-1]
     y = combined_data.iloc[:, -1].astype(int)
-    return X,y
+    return X, y

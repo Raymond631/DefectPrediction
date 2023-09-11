@@ -11,7 +11,7 @@ from sklearn import metrics
 from sklearn.metrics import auc, roc_curve, accuracy_score, classification_report, precision_score, recall_score, f1_score
 from sklearn.model_selection import StratifiedKFold
 from sklearn.neural_network import MLPClassifier
-from utils.model.randm.mdp_random import data_handle
+from xuezhang.model.randm.mdp_random import data_handle
 
 def plot_roc(labels, predict_prob, auca, preci, recall, f1, auc_ave, g_mean_ave, balance_ave):
     figure, axes = plt.subplots(ncols=1, nrows=3, figsize=(7.5, 8), dpi=100)
