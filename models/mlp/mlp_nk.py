@@ -17,18 +17,35 @@ def multilayer_perceptron():
     print(type(labels))
     # 使用随机欠采样
     rus = RandomUnderSampler(sampling_strategy=1, random_state=42, replacement=True)
-    X_resampled, y_resampled = rus.fit_resample(features, labels)
-    #X_resampled, y_resampled =features,labels
-
-    # 定义mlp的分类器
-    clf = MLPClassifier(hidden_layer_sizes=(40,80,60,40,20,10,5,2,1), activation='identity', solver='lbfgs', alpha=0.001,
-                        batch_size=50, learning_rate='adaptive', learning_rate_init=0.3, power_t=1, max_iter=200,
+    #X_resampled, y_resampled = rus.fit_resample(features, labels)
+    X_resampled, y_resampled =features,labels
+    clf = MLPClassifier(hidden_layer_sizes=(40, 80, 60, 40, 20, 10, 5, 2, 1), activation='tanh', solver='lbfgs',
+                        alpha=0.001, batch_size=50, learning_rate='adaptive', learning_rate_init=0.03, power_t=0.5, max_iter=200,
                         shuffle=True, random_state=42, tol=0.0001, verbose=True, warm_start=True, momentum=0.9,
                         nesterovs_momentum=True, early_stopping=False, validation_fraction=0.1, beta_1=0.9,
                         beta_2=0.999, epsilon=1e-08, n_iter_no_change=10)
 
+    '''
+    roc=0.67 acc=0.80 tomcat.csv=0.88 xerces-1.2.csv=0.83
+        clf = MLPClassifier(hidden_layer_sizes=(40,80,60,40,20,10,5,2,1), activation='tanh', solver='lbfgs', alpha=0.001,
+                        batch_size=50, learning_rate='adaptive', learning_rate_init=0.01, power_t=0.5, max_iter=200,
+                        shuffle=True, random_state=42, tol=0.0001, verbose=True, warm_start=True, momentum=0.9,
+                        nesterovs_momentum=True, early_stopping=False, validation_fraction=0.1, beta_1=0.9,
+                        beta_2=0.999, epsilon=1e-08, n_iter_no_change=10)
+    '''
+
+    '''
+    roc=0.63 acc=0.83 tomcat.csv=0.83
+        clf = MLPClassifier(hidden_layer_sizes=(40,80,60,40,20,10,5,2,1), activation='tanh', solver='sgd', alpha=0.001,
+                        batch_size=30, learning_rate='adaptive', learning_rate_init=0.01, power_t=0.5, max_iter=200,
+                        shuffle=True, random_state=42, tol=0.0001, verbose=True, warm_start=True, momentum=0.9,
+                        nesterovs_momentum=True, early_stopping=False, validation_fraction=0.1, beta_1=0.9,
+                        beta_2=0.999, epsilon=1e-08, n_iter_no_change=10)
+    '''
+
     x_train, x_val, y_train, y_val = train_test_split(X_resampled, y_resampled, test_size=0.2, random_state=42)
-    clf.fit(x_train, y_train)
+    for i in range(2):
+        clf.fit(x_train, y_train)
     joblib.dump(clf, "../../files/mlp.pkl")
     # 使用验证集预测结果
     pre = clf.predict(x_val)

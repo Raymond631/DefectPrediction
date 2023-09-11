@@ -33,6 +33,6 @@ def mlp_result(file_path):
     plt.show()
 
 if __name__ == '__main__':
-    file_path = '../../data/csv/Relink/tomcat.csv'
+    file_path = '../../data/csv/MORPH/tomcat.csv'
     test_mlp(file_path)
     mlp_result(file_path)
