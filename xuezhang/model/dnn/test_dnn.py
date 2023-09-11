@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.model_selection import StratifiedKFold  # 分层k折交叉验证
 
-from utils.model.randm.mdp_random import data_handle
+from xuezhang.model.randm.mdp_random import data_handle
 
 
 def test_network():

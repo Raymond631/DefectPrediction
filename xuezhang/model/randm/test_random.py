@@ -6,7 +6,7 @@ import joblib
 import matplotlib.pyplot as plt
 import numpy as np
 
-from utils.model.randm.mdp_random import data_handle
+from xuezhang.model.randm.mdp_random import data_handle
 
 
 # 缺陷预测

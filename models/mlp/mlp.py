@@ -12,7 +12,7 @@ from sklearn.metrics import auc, roc_curve, accuracy_score, classification_repor
     f1_score, roc_auc_score
 from sklearn.model_selection import StratifiedKFold
 from sklearn.neural_network import MLPClassifier
-from utils.model.randm.mdp_random import data_handle
+from xuezhang.model.randm.mdp_random import data_handle
 
 def plot(y_val,y_prob):
     # 计算ROC曲线
