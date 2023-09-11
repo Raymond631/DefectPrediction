@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.io import arff
 from sklearn import metrics
-from sklearn.metrics import auc, classification_report
+from sklearn.metrics import auc, classification_report, roc_curve, roc_auc_score
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
 from sklearn.preprocessing import LabelEncoder
@@ -13,20 +13,21 @@ from sklearn.preprocessing import LabelEncoder
 
 def plot_roc(labels, predict_prob, auc, macro, macro_recall, weighted):
     # 创建一个1行2列的画布
-    figure, axes = plt.subplots(ncols=1, nrows=2, figsize=(6.5, 6.5), dpi=100)
+    figure, axes = plt.subplots(ncols=1, nrows=2, figsize=(6.5, 8.5), dpi=100)
     # 绘图对象
     ax1 = axes[0]
     ax2 = axes[1]
 
     # 选择ax1
     plt.sca(ax1)
-    false_positive_rate, true_positive_rate, thresholds = metrics.roc_curve(labels, predict_prob)  # 真阳性，假阳性，阈值
-    roc_auc = metrics.auc(false_positive_rate, true_positive_rate)  # 计算AUC值
-    print('AUC=' + str(roc_auc))
+    # 计算ROC曲线
+    fpr, tpr, thresholds = roc_curve(labels, predict_prob)
+    roc_auc = roc_auc_score(labels, predict_prob)
+    # 绘制ROC曲线
     plt.title('PC5-ROC')
-    plt.plot(false_positive_rate, true_positive_rate, 'b', label='AUC = %0.4f' % roc_auc)
+    plt.plot(fpr, tpr, color='darkorange', label='AUC = %0.4f' % roc_auc)
     plt.legend(loc='lower right')
-    plt.plot([0, 1], [0, 1], 'r--')
+    plt.plot([0, 1], [0, 1], color='navy', linestyle='--')
     plt.ylabel('TPR（真阳性率）')
     plt.xlabel('FPR（伪阳性率）')
 
@@ -90,12 +91,11 @@ def naive_Bayes(folder_path):
     macro_recall = metrics.recall_score(y_test, y_pred, average='macro')
     weighted = metrics.f1_score(y_test, y_pred, average='weighted')
     # 预测
-    y_proba = clf.predict_proba(X_test[:1])
-    print(clf.predict(X_test[:1]))
+    y_proba = clf.predict_proba(X_test)[:, 1]
+    print(clf.predict(X_test))
     print("预计的概率值:", y_proba)
-
     print('分类报告：', classification_report(y_test, y_pred, target_names=class_labels))
-    plot_roc(y_test, y_pred, auc, macro, macro_recall, weighted)  # 绘制ROC曲线并求出AUC值
+    plot_roc(y_test, y_proba, auc, macro, macro_recall, weighted)  # 绘制ROC曲线并求出AUC值
 
 
 if __name__ == '__main__':

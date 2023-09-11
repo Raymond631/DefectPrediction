@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.model_selection import StratifiedKFold  # 分层k折交叉验证
 
-from xuezhang.model.randm.mdp_random import data_handle
+from utils.model.randm.mdp_random import data_handle
 
 
 def test_network():
@@ -15,7 +15,7 @@ def test_network():
     kf = StratifiedKFold(n_splits=10, shuffle=True)
     for train_index, test_index in kf.split(datasets[:], labels[:]):
         x_test = np.array(datasets)[test_index]
-        clf = joblib.load("./files/dnn.pkl")
+        clf = joblib.load("../../../files/dnn.pkl")
         pre = clf.predict(x_test)
     np.savetxt('network_result.txt', pre)
     print(pre)
@@ -29,7 +29,7 @@ def dnn_result():
     kf = StratifiedKFold(n_splits=10, shuffle=True)
     for train_index, test_index in kf.split(datasets[:], labels[:]):
         x_test = np.array(datasets)[test_index]
-        clf = joblib.load("./files/dnn.pkl")
+        clf = joblib.load("../../../files/dnn.pkl")
     pre = clf.predict(x_test)
     Counter(pre)  # {label:sum(label)}
     Yes = sum(pre == 1)

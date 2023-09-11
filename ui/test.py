@@ -1,6 +1,5 @@
 import tkinter as tk
 
-
 # root_window = tk.Tk()
 # # 设置窗口title
 # root_window.title('C语言中文网：c.biancheng.net')
@@ -23,34 +22,97 @@ import tkinter as tk
 # def button_click():
 #     label.config(text="Button Clicked!")
 
+# 全局变量
+models = []
+data_set = "AEEEM"
+buttons_single = []
+buttons_single_texts = ["naive_bayes", "svm"]
+buttons_combine = []
+buttons_combine_texts = ["naive_bayes", "svm"]
+single = 0
+combine = 0
+single_model = 'naive_bayes'
 
+
+# 提交按钮
 def button_data_click():
     label_select.config(text="Button Clicked!")
+    print(models)
+    print('------')
+    print(data_set)
 
 
+# 组合模型预测的模型选择
 def on_checkbox_click():
-    selected_options = []
-    if option1_var.get() == 1:
-        selected_options.append("选项1")
-    if option2_var.get() == 1:
-        selected_options.append("选项2")
+    models = []
+    for checkbox_var, checkbox_text in zip(buttons_combine, buttons_combine_texts):
+        if checkbox_var.get() == 1:
+            models.append(checkbox_text)
 
-    print("已选中的选项:", selected_options)
+    # if option1_var.get() == 1:
+    #     models.append("naive_bayes")
+    # if option2_var.get() == 1:
+    #     models.append("svm")
+    print("已选中的选项:", models)
 
 
+# 数据集选择
 def on_radio_button_click():
-    selected_option = radio_var.get()
-    print("已选中的选项:", selected_option)
+    global data_set
+    data_set = radio_var.get()
+    print("已选中的选项:", data_set)
+
+
+# 单个模型选择
+def radio_single_model():
+    global single_model
+    for i in range(len(buttons_single)):
+        if buttons_single[i] == buttons_single_texts[i]:
+            single_model = buttons_single_texts[i]
+            print("选中的值为:", single_model)
+
+
+# 选择组合模型预测
+def show_models_combine():
+    global combine
+    global single
+    if single == 1:
+        container_single_model_show.pack_forget()
+    container_combine_model_show.pack()
+    if combine == 0:
+        for i in range(len(buttons_combine_texts)):
+            buttons_combine.append(check_combines)
+            checkbox = tk.Checkbutton(container_combine_model_show, text=buttons_combine_texts[i],
+                                      variable=check_combines,
+                                      command=on_checkbox_click)
+            checkbox.pack(side=tk.LEFT)
+        combine = 1
+
+    # option1_checkbox.pack(side=tk.LEFT)
+    # option2_checkbox.pack(side=tk.LEFT)
+
+
+# 选择单模型预测
+def show_models_single():
+    global combine
+    global single
+    if combine == 1:
+        container_combine_model_show.pack_forget()
+    container_single_model_show.pack()
+    if single == 0:
+        for i in range(len(buttons_single_texts)):
+            buttons_single.append(buttons_single_texts[i])
+            radiobutton = tk.Radiobutton(container_single_model_show, text=buttons_single_texts[i],
+                                         variable=radio_single,
+                                         value=buttons_single_texts[i], command=radio_single_model)
+            radiobutton.pack(side=tk.LEFT)
+        single = 1
 
 
 root = tk.Tk()
 root.geometry('450x300')
 label_title = tk.Label(root, text="缺陷预测模型")
 label_title.pack(side='top')
-# label = tk.Label(root, text="Hello, World!")
-# label.pack()
-# button = tk.Button(root, text="Click Me", command=button_click)
-# button.pack()
 
 # 数据选择
 container_data_select = tk.Frame(root)
@@ -75,15 +137,20 @@ container_data_select.pack()
 container_model_select = tk.Frame(root)
 label_model = tk.Label(root, text="模型选择")
 label_model.pack(side=tk.TOP)
-option1_var = tk.IntVar()
-option2_var = tk.IntVar()
-option1_checkbox = tk.Checkbutton(container_model_select, text="naive_bayes", variable=option1_var,
-                                  command=on_checkbox_click)
-option1_checkbox.pack(side=tk.LEFT)
-option2_checkbox = tk.Checkbutton(container_model_select, text="svm", variable=option2_var, command=on_checkbox_click)
-option2_checkbox.pack(side=tk.LEFT)
-container_model_select.pack()
+container_model_show = tk.Frame(root)
 
+button_models = tk.Button(container_model_show, text="单模型预测", command=show_models_single)
+button_models.pack(side=tk.LEFT)
+button_models_single = tk.Button(container_model_show, text="组合模型预测", command=show_models_combine)
+button_models_single.pack(side=tk.LEFT)
+container_model_show.pack()
+container_single_model_show = tk.Frame(container_model_select)
+radio_single = tk.StringVar(value=buttons_single_texts[0])
+container_single_model_show.pack()
+container_combine_model_show = tk.Frame(container_model_select)
+check_combines = tk.IntVar()
+container_combine_model_show.pack()
+container_model_select.pack()
 button_data = tk.Button(root, text="确认选择", command=button_data_click)
 button_data.pack(fill=tk.Y, pady=30)
 label_select = tk.Label(root, text="")
