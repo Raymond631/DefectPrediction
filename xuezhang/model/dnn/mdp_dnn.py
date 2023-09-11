@@ -13,7 +13,7 @@ from sklearn.metrics import auc, roc_curve, accuracy_score, classification_repor
 from sklearn.model_selection import StratifiedKFold  # 分层k折交叉验证
 from sklearn.neural_network import MLPClassifier
 
-from utils.model.randm.mdp_random import data_handle
+from xuezhang.model.randm.mdp_random import data_handle
 
 
 def plot_roc(labels, predict_prob, auca, preci, recall, f1, auc_ave, g_mean_ave, balance_ave):

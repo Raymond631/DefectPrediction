@@ -1,27 +1,19 @@
-# -*- coding: utf-8 -*-
 from collections import Counter
-
 import joblib
 import matplotlib.pyplot as plt
 import numpy as np
-from sklearn.model_selection import StratifiedKFold  # 分层k折交叉验证
+from sklearn.model_selection import StratifiedKFold
 
-from utils.model.randm.mdp_random import data_handle
+from models.mlp.mlp import data_process
 
 
-def test_network():
-    datasets, labels = data_handle('MDP/KC3.csv')  # 对数据集进行处理
-    # kf=KFold(n_splits=10)
-    kf = StratifiedKFold(n_splits=10, shuffle=True)
-    for train_index, test_index in kf.split(datasets[:], labels[:]):
-        x_test = np.array(datasets)[test_index]
-        clf = joblib.load("../../../files/dnn.pkl")
-        pre = clf.predict(x_test)
+def test_mlp(file_path):
+    x_test, labels = data_process(file_path)
+    clf = joblib.load("../../files/mlp.pkl")
+    pre = clf.predict(x_test)
     np.savetxt('network_result.txt', pre)
-    print(pre)
+    print('预测结果',pre)
 
-
-# 画饼状图
 def dnn_result():
     datasets, labels = data_handle('MDP/KC3.csv')  # 对数据集进行处理
 
@@ -43,6 +35,6 @@ def dnn_result():
     plt.title('缺陷数目')
     plt.show()
 
-
 if __name__ == '__main__':
-    test_network()
+    file_path = '../../data/csv/AEEEM/EQ.csv'
+    test_mlp(file_path)
