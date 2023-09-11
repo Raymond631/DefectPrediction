@@ -8,11 +8,27 @@ import matplotlib.pyplot as plt
 import numpy as np
 from imblearn.under_sampling import RandomUnderSampler
 from sklearn import metrics
-from sklearn.metrics import auc, roc_curve, accuracy_score, classification_report, precision_score, recall_score, f1_score
+from sklearn.metrics import auc, roc_curve, accuracy_score, classification_report, precision_score, recall_score, \
+    f1_score, roc_auc_score
 from sklearn.model_selection import StratifiedKFold
 from sklearn.neural_network import MLPClassifier
 from utils.model.randm.mdp_random import data_handle
 
+def plot(y_val,y_prob):
+    # 计算ROC曲线
+    fpr, tpr, thresholds = roc_curve(y_val, y_prob)
+    roc_auc = roc_auc_score(y_val, y_prob)
+    # 绘制ROC曲线
+    plt.figure(figsize=(8, 6))
+    plt.plot(fpr, tpr, color='darkorange', lw=2, label='ROC curve (area = %0.2f)' % roc_auc)
+    plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('Receiver Operating Characteristic (ROC) Curve')
+    plt.legend(loc='lower right')
+    plt.show()
 def plot_roc(labels, predict_prob, auca, preci, recall, f1, auc_ave, g_mean_ave, balance_ave):
     figure, axes = plt.subplots(ncols=1, nrows=3, figsize=(7.5, 8), dpi=100)
     # 绘图对象
@@ -31,7 +47,6 @@ def plot_roc(labels, predict_prob, auca, preci, recall, f1, auc_ave, g_mean_ave,
     plt.plot([0, 1], [0, 1], 'r--')
     plt.ylabel('TPR（真阳性率）')
     plt.xlabel('FPR（伪阳性率）')
-    # plt.savefig('figures/PC5.png')
 
     # 选择ax2
     plt.sca(ax2)
@@ -77,29 +92,29 @@ def dataset_process(directory_path):
         df = pd.read_csv(csv_file)  # 请替换 'your_file.csv' 为你的文件路径
         # 将数据添加到合并的数据集中
         combined_data = pd.concat([combined_data, df], ignore_index=True)
-    labels = combined_data.iloc[:, -1].replace({"N": 0, "Y": 1})
+    labels = combined_data.iloc[:, -1].replace({"buggy": 0, "clean": 1})
     features = combined_data.iloc[:, :-1]
     return features,labels
 # 单个csv数据集文件处理
 def data_process(file_path):
     df = pd.read_csv(file_path)
     features = df.iloc[:, :-1]
-    labels = df.iloc[:, -1].replace({"N": 0, "Y": 1})
+    labels = df.iloc[:, -1].replace({"buggy": 0, "clean": 1})
     return features, labels
 def multilayer_perceptron():
-    directory_path = '../../data/csv/MDP/D1/PC5.csv'
-    features,labels = data_process(directory_path)
+    directory_path = '../../data/csv/MORPH'
+    features,labels = dataset_process(directory_path)
     print(type(features))
     print(type(labels))
     # 使用随机欠采样
     rus = RandomUnderSampler(sampling_strategy=1, random_state=0, replacement=True)
-    X_resampled, y_resampled = rus.fit_resample(features, labels)
-
+    #X_resampled, y_resampled = rus.fit_resample(features, labels)
+    X_resampled, y_resampled =features,labels
     # k折交叉验证
     kf = StratifiedKFold(n_splits=10, shuffle=True)
 
     # 定义mlp的分类器
-    clf = MLPClassifier(hidden_layer_sizes=(8,4,2), activation='tanh', solver='sgd', alpha=0.001,
+    clf = MLPClassifier(hidden_layer_sizes=(20,80,40,20,10,8,1), activation='tanh', solver='sgd', alpha=0.001,
                         batch_size=5, learning_rate='constant', learning_rate_init=0.01, power_t=0.5, max_iter=200,
                         shuffle=True, random_state=None, tol=0.0001, verbose=False, warm_start=False, momentum=0.9,
                         nesterovs_momentum=True, early_stopping=False, validation_fraction=0.1, beta_1=0.9,
@@ -145,6 +160,7 @@ def multilayer_perceptron():
         auc_list.append(roc_auc)
         g_mean_list.append(g_mean)
         balance_list.append(balance)
+        #plot(y_val, y_score)
 
 
     # 计算平均评估指标
