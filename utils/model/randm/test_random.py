@@ -11,21 +11,20 @@ from utils.model.randm.mdp_random import data_handle
 
 # 缺陷预测
 def test_random():
-    datasets, labels = data_handle('MDP/KC4.csv')  # 对数据集进行处理
+    datasets, labels = data_handle('MDP/KC4.csv')
     X_test = datasets[:]
     clf0 = joblib.load("./files/random.pkl")
-    y_predict = clf0.predict(X_test)  # 使用分类器对测试集进行预测
+    y_predict = clf0.predict(X_test)
     np.savetxt('random_result.txt', y_predict)
-    print(y_predict)
+    print('预测准确率',y_predict)
 
 
 # 画饼状图
 def random_result():
-    datasets, labels = data_handle('MDP/KC4.csv')  # 对数据集进行处理
+    datasets, labels = data_handle('MDP/KC4.csv')
     X_test = datasets[:]
     clf0 = joblib.load("./files/random.pkl")
     y_predict = clf0.predict(X_test)  # 使用分类器对测试集进行预测
-
     Counter(y_predict)  # {label:sum(label)}
     Yes = sum(y_predict == 1)
     No = sum(y_predict == 0)
