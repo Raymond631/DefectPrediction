@@ -1,3 +1,4 @@
+import joblib
 from sklearn.svm import SVC
 
 from utils.common import model_evaluation, read_arff, data_split, data_standard_scaler
@@ -15,6 +16,7 @@ def svm(folder_path, bug_label):
     svm_model = SVC(kernel='rbf', probability=True)  # 可以用不同的核函数,如'linear'、'rbf'等
     # 训练模型
     svm_model.fit(X_train, y_train)
+    joblib.dump(svm_model, "../../files/svm.pkl")
     # 使用模型进行预测
     y_pred = svm_model.predict(X_test)
     y_prob = svm_model.predict_proba(X_test)[:, 1]
