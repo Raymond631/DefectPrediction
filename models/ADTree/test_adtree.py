@@ -4,7 +4,7 @@ from matplotlib import pyplot as plt
 from sklearn.metrics import accuracy_score
 from models.mlp.mlp import data_process
 
-def test_dt(file_path):
+def test_adtree(file_path):
     x_test, labels = data_process(file_path)
     clf = joblib.load("../../files/dt.pkl")
     pre = clf.predict(x_test)
@@ -12,9 +12,9 @@ def test_dt(file_path):
     print('预测结果',pre)
     print('准确率',accuracy_score(labels, pre))
 
-def dt_result(file_path):
+def adtree_result(file_path):
     datasets, labels = data_process(file_path)
-    clf = joblib.load("../../files/dt.pkl")
+    clf = joblib.load("../../files/adtree.pkl")
     pre = clf.predict(datasets)
     Counter(pre)
     Yes = sum(pre == 1)
@@ -30,5 +30,5 @@ def dt_result(file_path):
 
 if __name__ == '__main__':
     file_path = '../../data/csv/MDP/D1/PC5.csv'  # 替换成你的目录路径
-    test_dt(file_path)
-    dt_result(file_path)
+    test_adtree(file_path)
+    adtree_result(file_path)
