@@ -29,7 +29,7 @@ def data_handle(filename):
         list_datasets.append(list_data)  # 将每个样本的数据存入列表
 
         row_data_label = read_data.iloc[i, len(read_data.iloc[i, :]) - 1]  # 读取每个样本的类别标签
-        if row_data_label == 'buggy':
+        if row_data_label == 'N':
             category_labels.append(0)  # 将二分类标签转化为0和1,0代表软件正常，1代表软件缺陷
         else:
             category_labels.append(1)
@@ -85,7 +85,7 @@ def plot_roc(labels, predict_prob, auc, macro, macro_recall, weighted):
 
 
 def random_forest():
-    datasets, labels = data_handle('MDP/KC4.csv')  # 对数据集进行处理
+    datasets, labels = data_handle('../../../data/csv/MDP/D1/PC1.csv')  # 对数据集进行处理
 
     # 训练集和测试集划分
     X_train = datasets[:115]  # 第0到115个数
@@ -97,7 +97,7 @@ def random_forest():
     clf = RandomForestClassifier()
     clf = RandomForestClassifier(n_estimators=200, random_state=0)
     clf.fit(X_train, y_train)  # 使用训练集对分类器训练
-    joblib.dump(clf, "./files/random.pkl")
+    joblib.dump(clf, "../../../files/random.pkl")
     y_predict = clf.predict(X_test)  # 使用分类器对测试集进行预测
 
     auc = metrics.accuracy_score(y_test, y_predict)
