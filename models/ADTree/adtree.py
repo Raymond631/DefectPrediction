@@ -3,36 +3,14 @@ import math
 import joblib
 from imblearn.under_sampling import RandomUnderSampler
 from sklearn.model_selection import train_test_split, StratifiedKFold
-from sklearn.tree import DecisionTreeClassifier
 from sklearn.metrics import accuracy_score, classification_report, precision_score, recall_score, f1_score, roc_curve, \
     auc
-import os
-import arff
-import numpy as np
-import pandas as pd
+from sklearn.tree import DecisionTreeClassifier
 from models.mlp.mlp import dataset_process, plot, data_process
-def read_arff_file(file_path):
-    data, meta = arff.loadarff(file_path)
-    data_array = np.array(data.tolist())
-    features = data_array[:, :-1]
-    labels = data_array[:, -1]
-    labels = np.where(labels == b'N', 0, 1)
-    return features, labels
 
-def folder_arff(folder_path):
-    arff_files = [f for f in os.listdir(folder_path) if f.endswith('.arff')]
-    combined_data = pd.DataFrame()
-    for filename in arff_files:
-        file_path = os.path.join(folder_path, filename)
-        data, meta = arff.loadarff(file_path)
-        df = pd.DataFrame(data)
-        combined_data = pd.concat([combined_data, df], ignore_index=True)
-    combined_data.iloc[:, -1] = combined_data.iloc[:, -1].apply(lambda x: 0 if x == b'N' else 1)
-    X = combined_data.iloc[:, :-1]
-    y = combined_data.iloc[:, -1].astype(int)
-    return X,y
 
-def decision_tree():
+
+def ad_tree():
     # 指定目标目录的路径
     directory_path = '../../data/csv/MDP/D1/PC5.csv'  # 替换成你的目录路径
     features,labels = data_process(directory_path)
@@ -43,20 +21,20 @@ def decision_tree():
     X_resampled, y_resampled = features,labels
     # 定义一个决策树分类器
     clf = DecisionTreeClassifier(
-        criterion='gini',  # 不纯度度量，可选 'gini' 或 'entropy'
-        splitter='random',  # 分割策略，可选 'best' 或 'random'
-        max_depth=100,  # 树的最大深度，None 表示不限制深度
-        min_samples_split=2,  # 节点分割的最小样本数
-        min_samples_leaf=2,  # 叶节点的最小样本数
-        min_weight_fraction_leaf=0.03,  # 叶节点的最小样本权重总和
-        max_features=None,  # 每次分割考虑的最大特征数
-        max_leaf_nodes=None,  # 叶节点的最大数量，None 表示不限制数量
-        class_weight='balanced',  # 类别权重，None 表示不考虑类别权重
-        random_state=42,  # 随机种子，用于重复性
+        criterion='gini',
+        splitter='random',
+        max_depth=100,
+        min_samples_split=2,
+        min_samples_leaf=2,
+        min_weight_fraction_leaf=0.03,
+        max_features=40,
+        max_leaf_nodes=50,
+        class_weight='balanced',
+        random_state=42,
     )
     X_train, X_val, y_train, y_val = train_test_split(X_resampled, y_resampled, test_size=0.2, random_state=42)
     clf.fit(X_train, y_train)
-    joblib.dump(clf, "../../files/dt.pkl")
+    joblib.dump(clf, "../../files/adtree.pkl")
     y_pred = clf.predict(X_val)
     y_score=clf.predict_proba(X_val)
     y_score = y_score[:, 1]
@@ -83,4 +61,4 @@ def decision_tree():
     plot(y_val,y_score)
 
 if __name__ == '__main__':
-    decision_tree()
+    ad_tree()
