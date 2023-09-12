@@ -4,7 +4,7 @@ from sklearn.naive_bayes import GaussianNB
 from utils.common import read_arff, model_evaluation
 
 
-def naive_Bayes(folder_path, bug_label):
+def naive_bayes(folder_path, bug_label):
     combined_data = read_arff(folder_path, bug_label)
     # 分割数据为特征 (X) 和目标变量 (y)
     X = combined_data.iloc[:, :-1]
@@ -25,4 +25,4 @@ def naive_Bayes(folder_path, bug_label):
 
 if __name__ == '__main__':
     print('nb')
-    naive_Bayes('../../data/arff/AEEEM', b'buggy')
+    naive_bayes('../../data/arff/AEEEM', b'buggy')
