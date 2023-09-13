@@ -4,18 +4,18 @@ from xgboost.sklearn import XGBClassifier
 from utils.common import model_evaluation, data_standard_scaler, data_split, read_arff
 
 
-def train_xgboost(X_train, y_train, xgb=None):
+def train_xgboost(X_train, y_train):
     # 创建并训练XGBoost分类器
     xgboost_model = XGBClassifier(n_estimators=100, max_depth=3, learning_rate=0.01, random_state=42)
     # 训练模型
     xgboost_model.fit(X_train, y_train)
     # 保存模型到磁盘
-    joblib.dump(xgboost_model, '../../files/xgboost.pkl')
+    joblib.dump(xgboost_model, '../../out/xgboost.pkl')
 
 
 def test_xgboost(X_test):
     # 加载模型
-    xgboost_model = joblib.load('../../files/xgboost.pkl')
+    xgboost_model = joblib.load('../../out/xgboost.pkl')
     # 使用模型进行预测
     xgboost_pred = xgboost_model.predict(X_test)
     xgboost_prob = xgboost_model.predict_proba(X_test)[:, 1]

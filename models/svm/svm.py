@@ -10,12 +10,12 @@ def train_svm(X_train, y_train):
     # 训练模型
     svm_model.fit(X_train, y_train)
     # 保存模型到磁盘
-    joblib.dump(svm_model, '../../files/svm.pkl')
+    joblib.dump(svm_model, '../../out/svm.pkl')
 
 
 def test_svm(X_test):
     # 加载模型
-    svm_model = joblib.load('../../files/svm.pkl')
+    svm_model = joblib.load('../../out/svm.pkl')
     # 使用模型进行预测
     y_pred = svm_model.predict(X_test)
     y_prob = svm_model.predict_proba(X_test)[:, 1]

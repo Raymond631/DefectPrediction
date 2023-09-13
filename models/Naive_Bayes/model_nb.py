@@ -10,12 +10,12 @@ def train_nb(X_train, y_train):
     # 训练模型
     nb_model.fit(X_train, y_train)
     # 保存模型到磁盘
-    joblib.dump(nb_model, '../../files/nb.pkl')
+    joblib.dump(nb_model, '../../out/nb.pkl')
 
 
 def test_nb(X_test):
     # 加载模型
-    nb_model = joblib.load('../../files/nb.pkl')
+    nb_model = joblib.load('../../out/nb.pkl')
     # 使用模型进行预测
     y_pred = nb_model.predict(X_test)
     y_prob = nb_model.predict_proba(X_test)[:, 1]

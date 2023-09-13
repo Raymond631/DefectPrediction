@@ -11,12 +11,12 @@ def train_adaboost(X_train, y_train):
     adaboost_classifier = AdaBoostClassifier(base_classifier, n_estimators=100, random_state=42)
     # 训练AdaBoost分类器
     adaboost_classifier.fit(X_train, y_train)
-    joblib.dump(adaboost_classifier, '../../files/adaboost.pkl')
+    joblib.dump(adaboost_classifier, '../../out/adaboost.pkl')
 
 
 def test_adaboost(X_test):
     # 加载模型
-    adaboost_model = joblib.load('../../files/adaboost.pkl')
+    adaboost_model = joblib.load('../../out/adaboost.pkl')
     # 使用模型进行预测
     adaboost_pred = adaboost_model.predict(X_test)
     adaboost_prob = adaboost_model.predict_proba(X_test)[:, 1]

@@ -1,7 +1,7 @@
 # 自定义
 #data/
 
-# Byte-compiled / optimized / DLL files
+# Byte-compiled / optimized / DLL out
 __pycache__/
 *.py[cod]
 *$py.class
@@ -30,7 +30,7 @@ share/python-wheels/
 MANIFEST
 
 # PyInstaller
-#  Usually these files are written by a python script from a template
+#  Usually these out are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
@@ -86,7 +86,7 @@ profile_default/
 ipython_config.py
 
 # pyenv
-#   For a library or package, you might want to ignore these files since the code is
+#   For a library or package, you might want to ignore these out since the code is
 #   intended to run in multiple environments; otherwise, check them in:
 # .python-version
 
@@ -119,7 +119,7 @@ __pypackages__/
 celerybeat-schedule
 celerybeat.pid
 
-# SageMath parsed files
+# SageMath parsed out
 *.sage.py
 
 # Environments
