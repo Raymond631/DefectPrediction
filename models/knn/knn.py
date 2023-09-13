@@ -5,7 +5,7 @@ from utils.common import read_arff, data_standard_scaler, data_split, model_eval
 
 
 def train_knn(X_train, y_train):
-    # 创建SVM分类器
+    # 创建knn分类器
     knn_model = KNeighborsClassifier(n_neighbors=5)
     # 训练模型
     knn_model.fit(X_train, y_train)

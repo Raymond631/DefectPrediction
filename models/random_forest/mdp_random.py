@@ -5,7 +5,7 @@ from utils.common import read_arff, data_split, data_standard_scaler, model_eval
 
 
 def train_rf(X_train, y_train):
-    # 创建SVM分类器
+    # 创建随机森林分类器
     clf = RandomForestClassifier(n_estimators=200, random_state=0)
     # 训练模型
     clf.fit(X_train, y_train)

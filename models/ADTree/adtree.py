@@ -5,7 +5,7 @@ from utils.common import read_arff, data_split, data_standard_scaler, model_eval
 
 
 def train_adt(X_train, y_train):
-    # 创建SVM分类器
+    # 创建adt分类器
     adt_model = DecisionTreeClassifier(
         criterion='gini',
         splitter='random',

@@ -5,7 +5,7 @@ from utils.common import read_arff, data_split, data_standard_scaler, model_eval
 
 
 def train_dt(X_train, y_train):
-    # 创建SVM分类器
+    # 创建dt分类器
     dt_model = DecisionTreeClassifier(
         criterion='gini',  # 不纯度度量，可选 'gini' 或 'entropy'
         splitter='random',  # 分割策略，可选 'best' 或 'random'
@@ -26,10 +26,10 @@ def train_dt(X_train, y_train):
 
 def test_dt(X_test):
     # 加载模型
-    adt_model = joblib.load('../../files/dt.pkl')
+    dt_model = joblib.load('../../files/dt.pkl')
     # 使用模型进行预测
-    y_pred = adt_model.predict(X_test)
-    y_prob = adt_model.predict_proba(X_test)[:, 1]
+    y_pred = dt_model.predict(X_test)
+    y_prob = dt_model.predict_proba(X_test)[:, 1]
     return y_pred, y_prob
 
 

@@ -4,7 +4,7 @@ from xgboost.sklearn import XGBClassifier
 from utils.common import model_evaluation, data_standard_scaler, data_split, read_arff
 
 
-def train_xgboost(X_train, y_train, xgb=None):
+def train_xgboost(X_train, y_train):
     # 创建并训练XGBoost分类器
     xgboost_model = XGBClassifier(n_estimators=100, max_depth=3, learning_rate=0.01, random_state=42)
     # 训练模型
