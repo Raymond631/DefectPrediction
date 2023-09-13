@@ -10,12 +10,12 @@ def train_knn(X_train, y_train):
     # 训练模型
     knn_model.fit(X_train, y_train)
     # 保存模型到磁盘
-    joblib.dump(knn_model, '../../files/knn.pkl')
+    joblib.dump(knn_model, '../../out/knn.pkl')
 
 
 def test_knn(X_test):
     # 加载模型
-    knn_model = joblib.load('../../files/svm.pkl')
+    knn_model = joblib.load('../../out/svm.pkl')
     # 使用模型进行预测
     y_pred = knn_model.predict(X_test)
     y_prob = knn_model.predict_proba(X_test)[:, 1]

@@ -21,12 +21,12 @@ def train_adt(X_train, y_train):
     # 训练模型
     adt_model.fit(X_train, y_train)
     # 保存模型到磁盘
-    joblib.dump(adt_model, '../../files/adtree.pkl')
+    joblib.dump(adt_model, '../../out/adtree.pkl')
 
 
 def test_adt(X_test):
     # 加载模型
-    adt_model = joblib.load('../../files/adtree.pkl')
+    adt_model = joblib.load('../../out/adtree.pkl')
     # 使用模型进行预测
     y_pred = adt_model.predict(X_test)
     y_prob = adt_model.predict_proba(X_test)[:, 1]

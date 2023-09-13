@@ -15,12 +15,12 @@ def train_mlp(X_train, y_train):
     for i in range(2):
         clf.fit(X_train, y_train)
     # 保存模型到磁盘
-    joblib.dump(clf, "../../files/mlp.pkl")
+    joblib.dump(clf, "../../out/mlp.pkl")
 
 
 def test_mlp(X_test):
     # 加载模型
-    clf = joblib.load('../../files/mlp.pkl')
+    clf = joblib.load('../../out/mlp.pkl')
     # 使用模型进行预测
     y_pred = clf.predict(X_test)
     y_prob = clf.predict_proba(X_test)[:, 1]

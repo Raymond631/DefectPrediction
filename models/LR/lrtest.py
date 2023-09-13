@@ -10,12 +10,12 @@ def train_lr(X_train, Y_train):
     # 训练模型
     lr_model.fit(X_train, Y_train)  # 调用LogisticRegression中的fit函数训练模型参数
     # 保存模型到磁盘
-    joblib.dump(lr_model, '../../files/lr.pkl')
+    joblib.dump(lr_model, '../../out/lr.pkl')
 
 
 def test_lr(X_test):
     # 加载模型
-    lr_model = joblib.load('../../files/lr.pkl')
+    lr_model = joblib.load('../../out/lr.pkl')
     # 使用模型进行预测
     lr_pred = lr_model.predict(X_test)
     lr_prob = lr_model.predict_proba(X_test)[:, 1]

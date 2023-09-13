@@ -21,12 +21,12 @@ def train_dt(X_train, y_train):
     # 训练模型
     dt_model.fit(X_train, y_train)
     # 保存模型到磁盘
-    joblib.dump(dt_model, '../../files/dt.pkl')
+    joblib.dump(dt_model, '../../out/dt.pkl')
 
 
 def test_dt(X_test):
     # 加载模型
-    dt_model = joblib.load('../../files/dt.pkl')
+    dt_model = joblib.load('../../out/dt.pkl')
     # 使用模型进行预测
     y_pred = dt_model.predict(X_test)
     y_prob = dt_model.predict_proba(X_test)[:, 1]
