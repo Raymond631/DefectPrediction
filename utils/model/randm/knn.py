@@ -1,17 +1,16 @@
 # coding=utf-8
 from __future__ import division
-
-import joblib
-import matplotlib as mpl
-import matplotlib.pyplot as plt
 import numpy as np
-
+import matplotlib.pyplot as plt
+import matplotlib as mpl
+import joblib
+from collections import Counter
 
 def classify(input_vct, data_set):
     data_set_size = data_set.shape[0]
     diff_mat = np.tile(input_vct, (data_set_size, 1)) - data_set  # 扩充input_vct到与data_set同型并相减
-    sq_diff_mat = diff_mat ** 2  # 矩阵中每个元素都平方
-    distance = sq_diff_mat.sum(axis=1) ** 0.5  # 每行相加求和并开平方根
+    sq_diff_mat = diff_mat**2  # 矩阵中每个元素都平方
+    distance = sq_diff_mat.sum(axis=1)**0.5  # 每行相加求和并开平方根
     return distance.min(axis=0)  # 返回最小距离
 
 
@@ -56,7 +55,6 @@ def roc(data_set):
         roc_rate[1][j] = abnormal1 / abnormal  # 阈值以上异常点/全体异常点
     return roc_rate
 
-
 def test(training_filename, test_filename):
     # 创建一个1行2列的画布
     figure, axes = plt.subplots(ncols=2, nrows=1, figsize=(9.6, 4.5), dpi=100)
@@ -66,7 +64,7 @@ def test(training_filename, test_filename):
 
     training_mat, training_label = file2mat(training_filename, 32)
     test_mat, test_label = file2mat(test_filename, 32)
-    test_size = test_mat.shape[0]  # shape[0]矩阵行数
+    test_size = test_mat.shape[0] #shape[0]矩阵行数
     result = np.zeros((test_size, 3))
     for i in range(test_size):
         result[i] = i + 1, classify(test_mat[i], training_mat), test_label[i]  # 序号， 最小欧氏距离， 测试集数据类别
@@ -76,7 +74,7 @@ def test(training_filename, test_filename):
     file.write(str(test_label));
     file.close()
     print(test_label)
-    # np.savetxt('knn-result.txt', test_label)
+    #np.savetxt('knn-result.txt', test_label)
 
     # 选择ax1
     plt.sca(ax1)
