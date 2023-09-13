@@ -1,29 +1,12 @@
-import math
-
 import joblib
-from imblearn.under_sampling import RandomUnderSampler
-from sklearn.model_selection import train_test_split, StratifiedKFold
-from sklearn.metrics import accuracy_score, classification_report, precision_score, recall_score, f1_score, roc_curve, \
-    auc
 from sklearn.tree import DecisionTreeClassifier
 
-from models.mlp.mlp import plot
-from utils.common import read_arff
+from utils.common import read_arff, data_split, data_standard_scaler, model_evaluation
 
 
-def ad_tree():
-    directory_path = '../../data/arff/MORPH'
-
-    combined_data=read_arff(directory_path, b'clean')
-    features = combined_data.iloc[:, :-1].values
-    labels = combined_data.iloc[:, -1].values.astype(int)
-
-    # 使用随机欠采样
-    rus = RandomUnderSampler(sampling_strategy=1, random_state=0, replacement=True)
-    #X_resampled, y_resampled = rus.fit_resample(features, labels)
-    X_resampled, y_resampled = features,labels
-    # 定义一个决策树分类器
-    clf = DecisionTreeClassifier(
+def train_adt(X_train, y_train):
+    # 创建SVM分类器
+    adt_model = DecisionTreeClassifier(
         criterion='gini',
         splitter='random',
         max_depth=100,
@@ -35,33 +18,36 @@ def ad_tree():
         class_weight='balanced',
         random_state=42,
     )
-    X_train, X_val, y_train, y_val = train_test_split(X_resampled, y_resampled, test_size=0.2, random_state=42)
-    clf.fit(X_train, y_train)
-    joblib.dump(clf, "../../files/adtree.pkl")
-    y_pred = clf.predict(X_val)
-    y_score=clf.predict_proba(X_val)
-    y_score = y_score[:, 1]
-    report = classification_report(y_val, y_pred)
-    print("分类报告：")
-    print(report)
-    accuracy = accuracy_score(y_val, y_pred)
-    precision = precision_score(y_val, y_pred, average='weighted')
-    recall = recall_score(y_val, y_pred, average='weighted')
-    f1score = f1_score(y_val, y_pred, average='weighted')
-    false_positive_rate, true_positive_rate, thresholds = roc_curve(y_val, y_score)
-    roc_auc = auc(false_positive_rate, true_positive_rate)
-    false_positive_rate, true_positive_rate = false_positive_rate[1], true_positive_rate[1]
-    g_mean = math.sqrt(true_positive_rate * (1 - false_positive_rate))
-    balance = 1 - math.sqrt(math.pow((1 - true_positive_rate), 2) + math.pow((0 - false_positive_rate), 2)) / math.sqrt(2)
-    print('准确率:', accuracy)  # 准确率
-    print('精确率:',precision)  # 精确率
-    print('召回率:', recall)  # 召回率
-    print('f1值:', f1score)
-    # 收敛标准，一般大于0.7时采纳模型
-    print('auc_ave:', roc_auc)
-    print('g_mean_ave:', g_mean)
-    print('balance_ave:', balance)
-    plot(y_val,y_score)
+    # 训练模型
+    adt_model.fit(X_train, y_train)
+    # 保存模型到磁盘
+    joblib.dump(adt_model, '../../files/adtree.pkl')
+
+
+def test_adt(X_test):
+    # 加载模型
+    adt_model = joblib.load('../../files/adtree.pkl')
+    # 使用模型进行预测
+    y_pred = adt_model.predict(X_test)
+    y_prob = adt_model.predict_proba(X_test)[:, 1]
+    return y_pred, y_prob
+
+
+def ad_tree(folder_path, bug_label):
+    # 读取arff数据集
+    df = read_arff(folder_path, bug_label)
+    # 将数据分割为训练集和测试集
+    X_train, X_test, y_train, y_test = data_split(df)
+    # 标准化特征数据
+    X_train, X_test = data_standard_scaler(X_train, X_test)
+
+    # 训练模型
+    train_adt(X_train, y_train)
+    # 测试模型
+    y_pred, y_prob = test_adt(X_test)
+    # 模型评估
+    model_evaluation(y_test, y_pred, y_prob)
+
 
 if __name__ == '__main__':
-    ad_tree()
+    ad_tree('../../data/arff/AEEEM', b'buggy')
