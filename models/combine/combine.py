@@ -1,7 +1,6 @@
 from sklearn.neural_network import MLPClassifier
 
-from models.svm.svm import train_svm
-from models.svm.test_svm import test_svm
+from models.svm.svm import train_svm, test_svm
 from utils.common import read_arff, data_split, data_standard_scaler, model_evaluation
 
 

@@ -1,7 +1,6 @@
 import joblib
 from sklearn.svm import SVC
 
-from models.svm.test_svm import test_svm
 from utils.common import read_arff, data_split, data_standard_scaler, model_evaluation
 
 
@@ -14,9 +13,18 @@ def train_svm(X_train, y_train):
     joblib.dump(svm_model, '../../files/svm.pkl')
 
 
-if __name__ == '__main__':
+def test_svm(X_test):
+    # 加载模型
+    svm_model = joblib.load('../../files/svm.pkl')
+    # 使用模型进行预测
+    y_pred = svm_model.predict(X_test)
+    y_prob = svm_model.predict_proba(X_test)[:, 1]
+    return y_pred, y_prob
+
+
+def svm(folder_path, bug_label):
     # 读取arff数据集
-    df = read_arff('../../data/arff/AEEEM', b'buggy')
+    df = read_arff(folder_path, bug_label)
     # 将数据分割为训练集和测试集
     X_train, X_test, y_train, y_test = data_split(df)
     # 标准化特征数据
@@ -28,3 +36,7 @@ if __name__ == '__main__':
     y_pred, y_prob = test_svm(X_test)
     # 模型评估
     model_evaluation(y_test, y_pred, y_prob)
+
+
+if __name__ == '__main__':
+    svm('../../data/arff/AEEEM', b'buggy')

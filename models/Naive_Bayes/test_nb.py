@@ -5,10 +5,6 @@ from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 
-from models.Naive_Bayes.model_nb import data_pre_processing, naive_Bayes
-from models.Naive_Bayes.model_nb import plot_roc
-from models.svm.svm import svm
-
 if __name__ == '__main__':
     print('组合')
     X, y, class_labels = data_pre_processing('../../data/arff/AEEEM')
