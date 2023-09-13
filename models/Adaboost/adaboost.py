@@ -1,8 +1,9 @@
-# 模型：LR
 import joblib
+# 模型：LR
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+from sklearn.ensemble import AdaBoostClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import classification_report
@@ -15,22 +16,22 @@ from sklearn.model_selection import train_test_split
 from utils.common import read_arff, data_split, data_standard_scaler, model_evaluation
 
 
-def train_lr(X_train, Y_train):
-    # 创建LR分类器
-    lr_model = LogisticRegression()
-    # 训练模型
-    lr_model.fit(X_train, Y_train)  # 调用LogisticRegression中的fit函数训练模型参数
-    joblib.dump(lr_model, '../../files/lr.pkl')
-def test_lr(X_test):
+def train_adaboost(X_train, y_train):
+    base_classifier = LogisticRegression()  # 选择LR的弱分类器
+    adaboost_classifier = AdaBoostClassifier(base_classifier, n_estimators=100, random_state=42)
+    # 训练AdaBoost分类器
+    adaboost_classifier.fit(X_train, y_train)
+    joblib.dump(adaboost_classifier, '../../files/adaboost.pkl')
+def test_adaboost(X_test):
     # 加载模型
-    lr_model = joblib.load('../../files/lr.pkl')
+    adaboost_model = joblib.load('../../files/adaboost.pkl')
     # 使用模型进行预测
-    lr_pred = lr_model.predict(X_test)
-    lr_prob = lr_model.predict_proba(X_test)[:, 1]
-    return lr_pred, lr_prob
+    adaboost_pred = adaboost_model.predict(X_test)
+    adaboost_prob = adaboost_model.predict_proba(X_test)[:, 1]
+    return adaboost_pred, adaboost_prob
 
 
-def lr(folder_path, bug_label):
+def adaboost(folder_path, bug_label):
     # 读取arff数据集
     df = read_arff(folder_path, bug_label)
     # 将数据分割为训练集和测试集
@@ -39,12 +40,12 @@ def lr(folder_path, bug_label):
     X_train, X_test = data_standard_scaler(X_train, X_test)
 
     # 训练模型
-    train_lr(X_train, y_train)
+    train_adaboost(X_train, y_train)
     # 测试模型
-    y_pred, y_prob = test_lr(X_test)
+    y_pred, y_prob = test_adaboost(X_test)
     # 模型评估
     model_evaluation(y_test, y_pred, y_prob)
 
 
 if __name__ == '__main__':
-    lr('../../data/arff/AEEEM', b'buggy')
+    adaboost('../../data/arff/AEEEM', b'buggy')
