@@ -1,24 +1,24 @@
-
 import math
+
 import joblib
 from imblearn.under_sampling import RandomUnderSampler
 from sklearn.metrics import auc, roc_curve, accuracy_score, classification_report, precision_score, recall_score, \
     f1_score
-from sklearn.model_selection import StratifiedKFold, train_test_split
+from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
 
-from models.mlp.mlp import dataset_process, plot, data_process
+from models.mlp.mlp import dataset_process, plot
 
 
 def multilayer_perceptron():
     directory_path = '../../data/csv/MORPH'
-    features,labels = dataset_process(directory_path)
+    features, labels = dataset_process(directory_path)
     print(type(features))
     print(type(labels))
     # 使用随机欠采样
     rus = RandomUnderSampler(sampling_strategy=1, random_state=42, replacement=True)
-    #X_resampled, y_resampled = rus.fit_resample(features, labels)
-    X_resampled, y_resampled =features,labels
+    # X_resampled, y_resampled = rus.fit_resample(features, labels)
+    X_resampled, y_resampled = features, labels
     clf = MLPClassifier(hidden_layer_sizes=(40, 80, 60, 40, 20, 10, 5, 2, 1), activation='tanh', solver='lbfgs',
                         alpha=0.001, batch_size=50, learning_rate='adaptive', learning_rate_init=0.03, power_t=0.5, max_iter=200,
                         shuffle=True, random_state=42, tol=0.0001, verbose=True, warm_start=True, momentum=0.9,
@@ -49,7 +49,7 @@ def multilayer_perceptron():
     joblib.dump(clf, "../../files/mlp.pkl")
     # 使用验证集预测结果
     pre = clf.predict(x_val)
-    y_score=clf.predict_proba(x_val)
+    y_score = clf.predict_proba(x_val)
     y_score = y_score[:, 1]
     # 计算评估指标
     accuracy = accuracy_score(y_val, pre)
@@ -65,7 +65,8 @@ def multilayer_perceptron():
     balance = 1 - math.sqrt(math.pow((1 - true_positive_rate), 2) + math.pow((0 - false_positive_rate), 2)) / math.sqrt(2)
     print('准确率：', accuracy_score(y_val, pre))
     print('分类报告：', classification_report(y_val, pre))
-    plot(y_val,y_score)
+    plot(y_val, y_score)
+
 
 if __name__ == '__main__':
     multilayer_perceptron()
