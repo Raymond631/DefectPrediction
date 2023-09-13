@@ -1,10 +1,13 @@
 import tkinter as tk
 from tkinter import ttk
 
-# 引入模型
 from models.ADTree.adtree import ad_tree
+# 引入模型
+from models.Adaboost.adaboost import adaboost
 from models.DT.dt import decision_tree
+from models.LR.lrtest import lr
 from models.Naive_Bayes.model_nb import naive_bayes
+from models.XGboost.xg import xgboost
 from models.mlp.mlp_nk import multilayer_perceptron
 from models.svm.svm import svm
 
@@ -12,9 +15,11 @@ from models.svm.svm import svm
 data_set = "AEEEM"
 # 可供选择的模型
 buttons_single = []
-buttons_single_texts = ["naive_bayes", "svm", "ADTree", "DT", "LR", "mlp"]
+buttons_single_texts = ["naive_bayes", "svm", "ADTree", "dt", "lr", "mlp", "adaboost", "xgboost", "random_forest",
+                        "knn"]
 buttons_combine = []
-buttons_combine_texts = ["naive_bayes", "svm", "ADTree", "DT", "LR", "mlp"]
+buttons_combine_texts = ["naive_bayes", "svm", "ADTree", "DT", "LR", "mlp", "adaboost", "xgboost", "random_forest",
+                         "knn"]
 single = 0
 combine = 0
 single_model = 'naive_bayes'
@@ -30,17 +35,9 @@ def button_data_click():
     global data_set
     global single_model
     folder_path = '../../data/arff/' + data_set
-    bug_label = ''
     print(f"数据集: {data_set}")
     # 数据集判断
-    if data_set == 'AEEEM':
-        bug_label = b'buggy'
-    elif data_set == 'MORPH':
-        bug_label = b'buggy'
-    elif data_set == 'RELINK':
-        bug_label = b'buggy'
-    elif data_set == 'SOFTLAB':
-        bug_label = b'buggy'
+    bug_label = b'buggy'
 
     if soc == 1:
         if len(models) > 1:
@@ -55,12 +52,21 @@ def button_data_click():
             svm(folder_path, bug_label)
         elif single_model == 'ADTree':
             ad_tree(folder_path, bug_label)
-        elif single_model == 'DT':
+        elif single_model == 'dt':
             decision_tree(folder_path, bug_label)
-        elif single_model == 'LR':
-            print("暂无模型")
+        elif single_model == 'lr':
+            lr(folder_path, bug_label)
         elif single_model == 'mlp':
-            multilayer_perceptron()
+            multilayer_perceptron(folder_path, bug_label)
+        elif single_model == 'adaboost':
+            adaboost(folder_path, bug_label)
+        elif single_model == 'xgboost':
+            xgboost(folder_path, bug_label)
+        elif single_model == 'random_forest':
+            # random_forest(folder_path, bug_label)
+            print("暂无模型")
+        elif single_model == 'knn':
+            print("暂无模型")
 
     label_select.config(text="Button Clicked!")
 
@@ -105,7 +111,7 @@ def show_models_combine():
             checkbox = tk.Checkbutton(container_combine_model_show, text=buttons_combine_texts[i],
                                       variable=check_combines,
                                       command=on_checkbox_click)
-            checkbox.pack(side=tk.LEFT)
+            checkbox.grid(row=i // 5, column=i % 5)
         combine = 1
 
 
@@ -123,7 +129,7 @@ def show_models_single():
             radiobutton = ttk.Radiobutton(container_single_model_show, text=buttons_single_texts[i],
                                           variable=radio_single,
                                           value=buttons_single_texts[i], command=radio_single_model)
-            radiobutton.pack(side=tk.LEFT)
+            radiobutton.grid(row=i // 5, column=i % 5)
             buttons_single.append(radiobutton)
         single = 1
 
