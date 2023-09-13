@@ -1,6 +1,10 @@
 import math
+import os
 
+import arff
 import joblib
+import numpy as np
+import pandas as pd
 from imblearn.under_sampling import RandomUnderSampler
 from sklearn.metrics import accuracy_score, classification_report, precision_score, recall_score, f1_score, roc_curve, \
     auc
@@ -8,6 +12,29 @@ from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 
 from models.mlp.mlp import plot, data_process
+
+
+def read_arff_file(file_path):
+    data, meta = arff.loadarff(file_path)
+    data_array = np.array(data.tolist())
+    features = data_array[:, :-1]
+    labels = data_array[:, -1]
+    labels = np.where(labels == b'N', 0, 1)
+    return features, labels
+
+
+def folder_arff(folder_path):
+    arff_files = [f for f in os.listdir(folder_path) if f.endswith('.arff')]
+    combined_data = pd.DataFrame()
+    for filename in arff_files:
+        file_path = os.path.join(folder_path, filename)
+        data, meta = arff.loadarff(file_path)
+        df = pd.DataFrame(data)
+        combined_data = pd.concat([combined_data, df], ignore_index=True)
+    combined_data.iloc[:, -1] = combined_data.iloc[:, -1].apply(lambda x: 0 if x == b'N' else 1)
+    X = combined_data.iloc[:, :-1]
+    y = combined_data.iloc[:, -1].astype(int)
+    return X, y
 
 
 def decision_tree():
@@ -49,8 +76,7 @@ def decision_tree():
     roc_auc = auc(false_positive_rate, true_positive_rate)
     false_positive_rate, true_positive_rate = false_positive_rate[1], true_positive_rate[1]
     g_mean = math.sqrt(true_positive_rate * (1 - false_positive_rate))
-    balance = 1 - math.sqrt(math.pow((1 - true_positive_rate), 2) + math.pow((0 - false_positive_rate), 2)) / math.sqrt(
-        2)
+    balance = 1 - math.sqrt(math.pow((1 - true_positive_rate), 2) + math.pow((0 - false_positive_rate), 2)) / math.sqrt(2)
     print('准确率:', accuracy)  # 准确率
     print('精确率:', precision)  # 精确率
     print('召回率:', recall)  # 召回率

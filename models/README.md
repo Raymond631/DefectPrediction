@@ -7,3 +7,11 @@
 * mlp：多层感知器
 * Naive_Bayes：朴素贝叶斯
 * svm：支持向量机
+
+# 数据集
+
+* AEEEM
+* MORPH
+* Relink
+* SOFTLAB
+* MDP
