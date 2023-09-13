@@ -54,9 +54,9 @@ def button_data_click():
         elif single_model == 'svm':
             svm(folder_path, bug_label)
         elif single_model == 'ADTree':
-            ad_tree()
+            ad_tree(folder_path, bug_label)
         elif single_model == 'DT':
-            decision_tree()
+            decision_tree(folder_path, bug_label)
         elif single_model == 'LR':
             print("暂无模型")
         elif single_model == 'mlp':
