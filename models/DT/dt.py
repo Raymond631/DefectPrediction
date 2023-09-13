@@ -76,7 +76,8 @@ def decision_tree():
     roc_auc = auc(false_positive_rate, true_positive_rate)
     false_positive_rate, true_positive_rate = false_positive_rate[1], true_positive_rate[1]
     g_mean = math.sqrt(true_positive_rate * (1 - false_positive_rate))
-    balance = 1 - math.sqrt(math.pow((1 - true_positive_rate), 2) + math.pow((0 - false_positive_rate), 2)) / math.sqrt(2)
+    balance = 1 - math.sqrt(math.pow((1 - true_positive_rate), 2) + math.pow((0 - false_positive_rate), 2)) / math.sqrt(
+        2)
     print('准确率:', accuracy)  # 准确率
     print('精确率:', precision)  # 精确率
     print('召回率:', recall)  # 召回率

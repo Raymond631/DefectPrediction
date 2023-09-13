@@ -2,16 +2,19 @@ import tkinter as tk
 from tkinter import ttk
 
 # 引入模型
+from models.ADTree.adtree import ad_tree
+from models.DT.dt import decision_tree
 from models.Naive_Bayes.model_nb import naive_bayes
+from models.mlp.mlp_nk import multilayer_perceptron
 from models.svm.svm import svm
 
 # 全局变量
 data_set = "AEEEM"
 # 可供选择的模型
 buttons_single = []
-buttons_single_texts = ["naive_bayes", "svm"]
+buttons_single_texts = ["naive_bayes", "svm", "ADTree", "DT", "LR", "mlp"]
 buttons_combine = []
-buttons_combine_texts = ["naive_bayes", "svm"]
+buttons_combine_texts = ["naive_bayes", "svm", "ADTree", "DT", "LR", "mlp"]
 single = 0
 combine = 0
 single_model = 'naive_bayes'
@@ -32,6 +35,13 @@ def button_data_click():
     # 数据集判断
     if data_set == 'AEEEM':
         bug_label = b'buggy'
+    elif data_set == 'MORPH':
+        bug_label = b'buggy'
+    elif data_set == 'RELINK':
+        bug_label = b'buggy'
+    elif data_set == 'SOFTLAB':
+        bug_label = b'buggy'
+
     if soc == 1:
         if len(models) > 1:
             print(f"组合模型: {models}")
@@ -43,6 +53,14 @@ def button_data_click():
             naive_bayes(folder_path, bug_label)
         elif single_model == 'svm':
             svm(folder_path, bug_label)
+        elif single_model == 'ADTree':
+            ad_tree()
+        elif single_model == 'DT':
+            decision_tree()
+        elif single_model == 'LR':
+            print("暂无模型")
+        elif single_model == 'mlp':
+            multilayer_perceptron()
 
     label_select.config(text="Button Clicked!")
 
