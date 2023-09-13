@@ -10,7 +10,11 @@ import os
 import arff
 import numpy as np
 import pandas as pd
-from models.mlp.mlp import dataset_process, plot, data_process
+
+from models.mlp.mlp import plot
+from utils.common import read_arff
+
+
 def read_arff_file(file_path):
     data, meta = arff.loadarff(file_path)
     data_array = np.array(data.tolist())
@@ -33,10 +37,10 @@ def folder_arff(folder_path):
     return X,y
 
 def decision_tree():
-    # 指定目标目录的路径
-    directory_path = '../../data/csv/MDP/D1/PC5.csv'  # 替换成你的目录路径
-    features,labels = data_process(directory_path)
-
+    directory_path = '../../data/arff/MORPH'
+    combined_data=read_arff(directory_path, b'clean')
+    features = combined_data.iloc[:, :-1].values
+    labels = combined_data.iloc[:, -1].values.astype(int)
     # 使用随机欠采样
     rus = RandomUnderSampler(sampling_strategy=1, random_state=0, replacement=True)
     #X_resampled, y_resampled = rus.fit_resample(features, labels)

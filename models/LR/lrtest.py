@@ -15,7 +15,7 @@ from sklearn.metrics import roc_curve
 from sklearn.metrics import roc_auc_score
 
 # 切分数据集
-df = pd.read_csv("EQ.csv")
+df = pd.read_csv("../../data/csv/AEEEM/EQ.csv")
 target = df.pop("class")
 data = df.values
 X = data

@@ -6,14 +6,17 @@ from sklearn.model_selection import train_test_split, StratifiedKFold
 from sklearn.metrics import accuracy_score, classification_report, precision_score, recall_score, f1_score, roc_curve, \
     auc
 from sklearn.tree import DecisionTreeClassifier
-from models.mlp.mlp import dataset_process, plot, data_process
 
+from models.mlp.mlp import plot
+from utils.common import read_arff
 
 
 def ad_tree():
-    # 指定目标目录的路径
-    directory_path = '../../data/csv/MDP/D1/PC5.csv'  # 替换成你的目录路径
-    features,labels = data_process(directory_path)
+    directory_path = '../../data/arff/MORPH'
+
+    combined_data=read_arff(directory_path, b'clean')
+    features = combined_data.iloc[:, :-1].values
+    labels = combined_data.iloc[:, -1].values.astype(int)
 
     # 使用随机欠采样
     rus = RandomUnderSampler(sampling_strategy=1, random_state=0, replacement=True)

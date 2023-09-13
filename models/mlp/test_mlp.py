@@ -2,21 +2,18 @@ from collections import Counter
 import joblib
 import matplotlib.pyplot as plt
 from sklearn.metrics import accuracy_score
-from models.mlp.mlp import data_process, dataset_process
 
 
-def test_mlp(file_path):
-    x_test, labels = data_process(file_path)
+
+def test_mlp(X_test):
     clf = joblib.load("../../files/mlp.pkl")
-    pre = clf.predict(x_test)
-    #np.savetxt('network_result.txt', pre)
-    print('预测结果',pre)
-    print('准确率',accuracy_score(labels, pre))
+    y_pred = clf.predict(X_test)
+    y_prob = clf.predict_proba(X_test)[:, 1]
+    return y_pred, y_prob
 
-def mlp_result(file_path):
-    datasets, labels = data_process(file_path)
+def mlp_result(X_test):
     clf = joblib.load("../../files/mlp.pkl")
-    pre = clf.predict(datasets)
+    pre = clf.predict(X_test)
     Counter(pre)
     Yes = sum(pre == 1)
     No = sum(pre == 0)
@@ -29,7 +26,3 @@ def mlp_result(file_path):
     plt.title('缺陷数目')
     plt.show()
 
-if __name__ == '__main__':
-    file_path = '../../data/csv/MORPH/tomcat.csv'
-    test_mlp(file_path)
-    mlp_result(file_path)

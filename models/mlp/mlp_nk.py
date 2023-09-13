@@ -7,12 +7,15 @@ from sklearn.metrics import auc, roc_curve, accuracy_score, classification_repor
 from sklearn.model_selection import StratifiedKFold, train_test_split
 from sklearn.neural_network import MLPClassifier
 
-from models.mlp.mlp import dataset_process, plot, data_process
+from models.mlp.mlp import plot
+from utils.common import read_arff
 
 
 def multilayer_perceptron():
-    directory_path = '../../data/csv/MORPH'
-    features,labels = dataset_process(directory_path)
+    directory_path = '../../data/arff/MORPH'
+    combined_data=read_arff(directory_path, b'clean')
+    features = combined_data.iloc[:, :-1].values
+    labels = combined_data.iloc[:, -1].values.astype(int)
     print(type(features))
     print(type(labels))
     # 使用随机欠采样
