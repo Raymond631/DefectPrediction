@@ -43,6 +43,7 @@ def button_data_click():
             naive_bayes(folder_path, bug_label)
         elif single_model == 'svm':
             svm(folder_path, bug_label)
+
     label_select.config(text="Button Clicked!")
 
 
@@ -140,7 +141,7 @@ label_model = tk.Label(root, text="模型选择")
 label_model.pack(side=tk.TOP)
 container_model_show = tk.Frame(root)
 button_models = tk.Button(container_model_show, text="单模型预测", command=show_models_single)
-button_models.pack(side=tk.LEFT)
+button_models.pack(side=tk.LEFT, padx=10)
 button_models_single = tk.Button(container_model_show, text="组合模型预测", command=show_models_combine)
 button_models_single.pack(side=tk.LEFT)
 container_model_show.pack()
