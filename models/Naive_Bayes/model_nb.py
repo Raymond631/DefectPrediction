@@ -1,24 +1,39 @@
-from sklearn.model_selection import train_test_split
+import joblib
 from sklearn.naive_bayes import GaussianNB
 
-from utils.common import read_arff, model_evaluation
+from utils.common import read_arff, data_split, data_standard_scaler, model_evaluation
+
+
+def train_nb(X_train, y_train):
+    # 创建NB分类器
+    nb_model = GaussianNB(var_smoothing=1e-9)
+    # 训练模型
+    nb_model.fit(X_train, y_train)
+    # 保存模型到磁盘
+    joblib.dump(nb_model, '../../files/nb.pkl')
+
+
+def test_nb(X_test):
+    # 加载模型
+    nb_model = joblib.load('../../files/nb.pkl')
+    # 使用模型进行预测
+    y_pred = nb_model.predict(X_test)
+    y_prob = nb_model.predict_proba(X_test)[:, 1]
+    return y_pred, y_prob
 
 
 def naive_bayes(folder_path, bug_label):
-    combined_data = read_arff(folder_path, bug_label)
-    # 分割数据为特征 (X) 和目标变量 (y)
-    X = combined_data.iloc[:, :-1]
-    y = combined_data.iloc[:, -1].astype(int)
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+    # 读取arff数据集
+    df = read_arff(folder_path, bug_label)
+    # 将数据分割为训练集和测试集
+    X_train, X_test, y_train, y_test = data_split(df)
+    # 标准化特征数据
+    X_train, X_test = data_standard_scaler(X_train, X_test)
 
-    # 创建并训练分类器
-    clf = GaussianNB(var_smoothing=1e-9)
-    clf.fit(X_train, y_train)
-
-    # 评估
-    y_pred = clf.predict(X_test)
-    y_prob = clf.predict_proba(X_test)[:, 1]
-
+    # 训练模型
+    train_nb(X_train, y_train)
+    # 测试模型
+    y_pred, y_prob = test_nb(X_test)
     # 模型评估
     model_evaluation(y_test, y_pred, y_prob)
 

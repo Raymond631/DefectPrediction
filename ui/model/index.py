@@ -26,7 +26,7 @@ def button_data_click():
     global models
     global data_set
     global single_model
-    folder_path = '../data/arff/' + data_set
+    folder_path = '../../data/arff/' + data_set
     bug_label = ''
     print(f"数据集: {data_set}")
     # 数据集判断
