@@ -1,17 +1,7 @@
 import joblib
 # 模型：LR
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import classification_report
-from sklearn.metrics import precision_score
-from sklearn.metrics import recall_score
-from sklearn.metrics import roc_auc_score
-from sklearn.metrics import roc_curve
-from sklearn.model_selection import train_test_split
 
 from utils.common import read_arff, data_split, data_standard_scaler, model_evaluation
 
@@ -22,6 +12,8 @@ def train_adaboost(X_train, y_train):
     # 训练AdaBoost分类器
     adaboost_classifier.fit(X_train, y_train)
     joblib.dump(adaboost_classifier, '../../files/adaboost.pkl')
+
+
 def test_adaboost(X_test):
     # 加载模型
     adaboost_model = joblib.load('../../files/adaboost.pkl')

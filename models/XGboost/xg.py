@@ -1,30 +1,18 @@
 import joblib
-
-import matplotlib.pyplot as plt
-import numpy as np
-import pandas as pd
-from sklearn.linear_model import LogisticRegression
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import classification_report
-from sklearn.metrics import precision_score
-from sklearn.metrics import recall_score
-from sklearn.metrics import roc_auc_score
-from sklearn.metrics import roc_curve
-from sklearn.model_selection import train_test_split
+from xgboost.sklearn import XGBClassifier
 
 from utils.common import model_evaluation, data_standard_scaler, data_split, read_arff
 
 
 def train_xgboost(X_train, y_train, xgb=None):
     # 创建并训练XGBoost分类器
-    xgboost_model = xgb.XGBClassifier(
-        n_estimators=100,
-        max_depth=3,
-        learning_rate=0.01,
-        random_state=42
-    )
+    xgboost_model = XGBClassifier(n_estimators=100, max_depth=3, learning_rate=0.01, random_state=42)
+    # 训练模型
     xgboost_model.fit(X_train, y_train)
+    # 保存模型到磁盘
     joblib.dump(xgboost_model, '../../files/xgboost.pkl')
+
+
 def test_xgboost(X_test):
     # 加载模型
     xgboost_model = joblib.load('../../files/xgboost.pkl')
