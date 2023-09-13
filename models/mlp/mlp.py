@@ -1,12 +1,11 @@
 import glob
+import pandas as pd
 import math
 import os
-
 import joblib
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 from imblearn.under_sampling import RandomUnderSampler
 from sklearn import metrics
 from sklearn.metrics import auc, roc_curve, accuracy_score, classification_report, precision_score, recall_score, \
@@ -14,8 +13,9 @@ from sklearn.metrics import auc, roc_curve, accuracy_score, classification_repor
 from sklearn.model_selection import StratifiedKFold
 from sklearn.neural_network import MLPClassifier
 
+from utils.common import read_arff, csv_process
 
-def plot(y_val, y_prob):
+def plot(y_val,y_prob):
     # 计算ROC曲线
     fpr, tpr, thresholds = roc_curve(y_val, y_prob)
     roc_auc = roc_auc_score(y_val, y_prob)
@@ -30,8 +30,6 @@ def plot(y_val, y_prob):
     plt.title('Receiver Operating Characteristic (ROC) Curve')
     plt.legend(loc='lower right')
     plt.show()
-
-
 def plot_roc(labels, predict_prob, auca, preci, recall, f1, auc_ave, g_mean_ave, balance_ave):
     figure, axes = plt.subplots(ncols=1, nrows=3, figsize=(7.5, 8), dpi=100)
     # 绘图对象
@@ -88,37 +86,18 @@ def plot_roc(labels, predict_prob, auca, preci, recall, f1, auc_ave, g_mean_ave,
     table.scale(1.5, 1.5)
     plt.show()
 
-
-# 文件夹下合并数据集处理
-def dataset_process(directory_path):
-    csv_files = glob.glob(os.path.join(directory_path, '*.csv'))
-    combined_data = pd.DataFrame()
-    for csv_file in csv_files:
-        df = pd.read_csv(csv_file)  # 请替换 'your_file.csv' 为你的文件路径
-        # 将数据添加到合并的数据集中
-        combined_data = pd.concat([combined_data, df], ignore_index=True)
-    labels = combined_data.iloc[:, -1].replace({"buggy": 0, "clean": 1})
-    features = combined_data.iloc[:, :-1]
-    return features, labels
-
-
-# 单个csv数据集文件处理
-def data_process(file_path):
-    df = pd.read_csv(file_path)
-    features = df.iloc[:, :-1]
-    labels = df.iloc[:, -1].replace({"N": 0, "Y": 1})
-    return features, labels
-
-
 def multilayer_perceptron():
-    directory_path = '../../data/csv/MORPH'
-    features, labels = dataset_process(directory_path)
-    print(type(features))
-    print(type(labels))
+    directory_path = '../../data/arff/MORPH'
+    # features, labels = csv_process(directory_path, 'buggy', 'clean')
+    # print(type(features))
+    # print(type(labels))
+    combined_data=read_arff(directory_path, b'clean')
+    features = combined_data.iloc[:, :-1].values
+    labels = combined_data.iloc[:, -1].values.astype(int)
     # 使用随机欠采样
     rus = RandomUnderSampler(sampling_strategy=1, random_state=0, replacement=True)
-    # X_resampled, y_resampled = rus.fit_resample(features, labels)
-    X_resampled, y_resampled = features, labels
+    #X_resampled, y_resampled = rus.fit_resample(features, labels)
+    X_resampled, y_resampled =features,labels
     # k折交叉验证
     kf = StratifiedKFold(n_splits=10, shuffle=True)
 
@@ -139,13 +118,13 @@ def multilayer_perceptron():
     balance_list = []
     for train_index, test_index in kf.split(X_resampled, y_resampled):
         # 使用 train_index 来获取训练集的索引
-        x_train, x_val = features.iloc[train_index], features.iloc[test_index]
-        y_train, y_val = labels.iloc[train_index], labels.iloc[test_index]
+        x_train, x_val = features[train_index], features[test_index]
+        y_train, y_val = labels[train_index], labels[test_index]
         clf.fit(x_train, y_train)
         joblib.dump(clf, "../../files/mlp.pkl")
         # 使用验证集预测结果
         pre = clf.predict(x_val)
-        y_score = clf.predict_proba(x_val)
+        y_score=clf.predict_proba(x_val)
         y_score = y_score[:, 1]
         # 计算评估指标
         accuracy = accuracy_score(y_val, pre)
@@ -169,7 +148,8 @@ def multilayer_perceptron():
         auc_list.append(roc_auc)
         g_mean_list.append(g_mean)
         balance_list.append(balance)
-        # plot(y_val, y_score)
+        #plot(y_val, y_score)
+
 
     # 计算平均评估指标
     auca = np.mean(accuracy_list)
@@ -191,7 +171,6 @@ def multilayer_perceptron():
     # y_prob=clf.predict_proba(X_resampled)
     # y_prob = y_prob[:, 1]
     plot_roc(y_val, y_score, auca, preci, recall, f1, auc_ave, g_mean_ave, balance_ave)  # 绘制ROC曲线并求出AUC值
-
 
 if __name__ == '__main__':
     multilayer_perceptron()

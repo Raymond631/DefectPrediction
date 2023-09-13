@@ -13,7 +13,7 @@ from sklearn.metrics import roc_curve
 from sklearn.model_selection import train_test_split
 
 # 切分数据集
-df = pd.read_csv("EQ.csv")
+df = pd.read_csv("../../data/csv/AEEEM/EQ.csv")
 target = df.pop("class")
 data = df.values
 X = data

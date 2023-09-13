@@ -2,23 +2,26 @@ import math
 
 import joblib
 from imblearn.under_sampling import RandomUnderSampler
+from sklearn.model_selection import train_test_split, StratifiedKFold
 from sklearn.metrics import accuracy_score, classification_report, precision_score, recall_score, f1_score, roc_curve, \
     auc
-from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
 
-from models.mlp.mlp import plot, data_process
+from models.mlp.mlp import plot
+from utils.common import read_arff
 
 
 def ad_tree():
-    # 指定目标目录的路径
-    directory_path = '../../data/csv/MDP/D1/PC5.csv'  # 替换成你的目录路径
-    features, labels = data_process(directory_path)
+    directory_path = '../../data/arff/MORPH'
+
+    combined_data=read_arff(directory_path, b'clean')
+    features = combined_data.iloc[:, :-1].values
+    labels = combined_data.iloc[:, -1].values.astype(int)
 
     # 使用随机欠采样
     rus = RandomUnderSampler(sampling_strategy=1, random_state=0, replacement=True)
-    # X_resampled, y_resampled = rus.fit_resample(features, labels)
-    X_resampled, y_resampled = features, labels
+    #X_resampled, y_resampled = rus.fit_resample(features, labels)
+    X_resampled, y_resampled = features,labels
     # 定义一个决策树分类器
     clf = DecisionTreeClassifier(
         criterion='gini',
@@ -36,7 +39,7 @@ def ad_tree():
     clf.fit(X_train, y_train)
     joblib.dump(clf, "../../files/adtree.pkl")
     y_pred = clf.predict(X_val)
-    y_score = clf.predict_proba(X_val)
+    y_score=clf.predict_proba(X_val)
     y_score = y_score[:, 1]
     report = classification_report(y_val, y_pred)
     print("分类报告：")
@@ -51,15 +54,14 @@ def ad_tree():
     g_mean = math.sqrt(true_positive_rate * (1 - false_positive_rate))
     balance = 1 - math.sqrt(math.pow((1 - true_positive_rate), 2) + math.pow((0 - false_positive_rate), 2)) / math.sqrt(2)
     print('准确率:', accuracy)  # 准确率
-    print('精确率:', precision)  # 精确率
+    print('精确率:',precision)  # 精确率
     print('召回率:', recall)  # 召回率
     print('f1值:', f1score)
     # 收敛标准，一般大于0.7时采纳模型
     print('auc_ave:', roc_auc)
     print('g_mean_ave:', g_mean)
     print('balance_ave:', balance)
-    plot(y_val, y_score)
-
+    plot(y_val,y_score)
 
 if __name__ == '__main__':
     ad_tree()
