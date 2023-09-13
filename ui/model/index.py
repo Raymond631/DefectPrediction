@@ -8,7 +8,9 @@ from models.DT.dt import decision_tree
 from models.LR.lrtest import lr
 from models.Naive_Bayes.model_nb import naive_bayes
 from models.XGboost.xg import xgboost
+from models.knn.knn import knn
 from models.mlp.mlp_nk import multilayer_perceptron
+from models.random_forest.mdp_random import rf
 from models.svm.svm import svm
 
 # 全局变量
@@ -63,13 +65,12 @@ def button_data_click():
         elif single_model == 'xgboost':
             xgboost(folder_path, bug_label)
         elif single_model == 'random_forest':
-            # random_forest(folder_path, bug_label)
-            print("暂无模型")
+            rf(folder_path, bug_label)
         elif single_model == 'knn':
-            print("暂无模型")
+            knn(folder_path, bug_label)
 
-    label_select.config(text="Button Clicked!")
-
+    # label_select.config(text="Button Clicked!")
+                                                  
 
 # 组合模型预测的模型选择
 def on_checkbox_click():
