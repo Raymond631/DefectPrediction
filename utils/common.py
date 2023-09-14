@@ -1,9 +1,11 @@
 import glob
 import os
+import tkinter as tk
 
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from scipy.io import arff
 from sklearn.metrics import classification_report, roc_curve, roc_auc_score, confusion_matrix
 from sklearn.model_selection import train_test_split
@@ -114,7 +116,15 @@ def model_evaluation(y_test, y_pred, y_prob):
     ax1.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=90)
     ax1.axis('equal')  # 保证饼状图是正圆形
 
-    # 创建一个包含子图的Matplotlib图
+    # 创建Tkinter窗口
+    root = tk.Tk()
+    root.title("Matplotlib in Tkinter")
+
+    # 创建一个框架以包含Matplotlib图
+    frame = tk.Frame(root)
+    frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+    # 创建一个Matplotlib图
     fig, axs = plt.subplots(2, 2, figsize=(12, 10))
 
     # 在子图1中显示分类报告
@@ -149,8 +159,10 @@ def model_evaluation(y_test, y_pred, y_prob):
     axs[1, 1].pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=90)
     axs[1, 1].axis('equal')
 
-    # 调整子图布局
-    plt.tight_layout()
+    # 创建一个Canvas，用于在Tkinter窗口中显示Matplotlib图
+    canvas = FigureCanvasTkAgg(fig, master=frame)
+    canvas_widget = canvas.get_tk_widget()
+    canvas_widget.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
-    # 显示图形
-    plt.show()
+    # 运行Tkinter主循环
+    root.mainloop()
