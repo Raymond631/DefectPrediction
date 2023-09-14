@@ -160,6 +160,11 @@ def model_evaluation(y_test, y_pred, y_prob):
     axs[1, 1].pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=90)
     axs[1, 1].axis('equal')
 
+    # 调整子图布局
+    plt.tight_layout()
+    # 显示图形
+    plt.show()
+
     # 创建一个Canvas，用于在Tkinter窗口中显示Matplotlib图
     canvas = FigureCanvasTkAgg(fig, master=frame)
     canvas_widget = canvas.get_tk_widget()
