@@ -9,7 +9,7 @@ from models.knn.knn import train_knn, test_knn
 from models.mlp.mlp_nk import train_mlp, test_mlp
 from models.random_forest.mdp_random import train_rf, test_rf
 from models.svm.svm import train_svm, test_svm
-from utils.common import read_arff, data_split, data_standard_scaler, model_evaluation
+from utils.common import read_arff, data_split, data_standard_scaler, model_evaluation, path_dataset_name
 
 df = ''
 
@@ -113,22 +113,4 @@ def combine_models(folder_path, bug_label, models):
     # 元分类器
     y_pred, y_prob = meta_classifier(X_train, y_train, X_test, models[-1])
     # 模型评估
-    model_evaluation(y_test, y_pred, y_prob)
-
-
-if __name__ == '__main__':
-    # 读取arff数据集
-    df = read_arff('../../data/arff/AEEEM', b'buggy')
-    # 特征变量
-    X = df.iloc[:, :-1].values
-    # 将数据分割为训练集和测试集
-    X_train, X_test, y_train, y_test = data_split(df)
-    # 标准化特征数据
-    X_train, X_test = data_standard_scaler(X_train, X_test)
-
-    # 基分类器：SVM
-    P_train, P_test, q_train, q_test = base_classifier(X_train, y_train, X)
-    # 元分类器：MLP
-    q_pred, q_prob = meta_classifier(P_train, q_train, P_test)
-    # 模型评估
-    model_evaluation(q_test, q_pred, q_prob)
+    model_evaluation(y_test, y_pred, y_prob, f"Combine : {path_dataset_name(folder_path)}")

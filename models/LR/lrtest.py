@@ -1,7 +1,7 @@
 import joblib
 from sklearn.linear_model import LogisticRegression
 
-from utils.common import read_arff, data_split, data_standard_scaler, model_evaluation
+from utils.common import read_arff, data_split, data_standard_scaler, model_evaluation, path_dataset_name
 
 
 def train_lr(X_train, Y_train):
@@ -35,7 +35,7 @@ def lr(folder_path, bug_label):
     # 测试模型
     y_pred, y_prob = test_lr(X_test)
     # 模型评估
-    model_evaluation(y_test, y_pred, y_prob)
+    model_evaluation(y_test, y_pred, y_prob, f"LR : {path_dataset_name(folder_path)}")
 
 
 if __name__ == '__main__':

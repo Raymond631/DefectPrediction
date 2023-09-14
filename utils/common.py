@@ -90,13 +90,17 @@ def data_standard_scaler(X_train, X_test):
     return X_train, X_test
 
 
-def model_evaluation(y_test, y_pred, y_prob):
+def model_evaluation(y_test, y_pred, y_prob, fig_title):
     """
     模型评估
     @param y_test: 测试集-目标变量
     @param y_pred: 预测结果
     @param y_prob: 预测概率
     """
+    # 打印预测结果
+    print("预测结果：")
+    print(y_pred)
+
     # 生成分类报告
     report = classification_report(y_test, y_pred, target_names=['clean', 'buggy'])
 
@@ -112,9 +116,6 @@ def model_evaluation(y_test, y_pred, y_prob):
     sizes = [np.sum(y_pred == 0), np.sum(y_pred == 1)]
     explode = (0.1, 0)  # 突出第一个分片
     colors = ['#ff9999', '#66b3ff']  # 饼状图颜色
-    fig1, ax1 = plt.subplots()
-    ax1.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', shadow=True, startangle=90)
-    ax1.axis('equal')  # 保证饼状图是正圆形
 
     # 创建Tkinter窗口
     root = tk.Tk()
@@ -127,6 +128,8 @@ def model_evaluation(y_test, y_pred, y_prob):
 
     # 创建一个Matplotlib图
     fig, axs = plt.subplots(2, 2, figsize=(12, 10))
+    # 在整个图的最上方添加一个标题
+    fig.suptitle(fig_title, fontsize=16)
 
     # 在子图1中显示分类报告
     axs[0, 0].text(0.1, 0.5, report, fontsize=12)
@@ -172,3 +175,12 @@ def model_evaluation(y_test, y_pred, y_prob):
 
     # 运行Tkinter主循环
     root.mainloop()
+
+
+def path_dataset_name(path):
+    parts = path.split('/')
+    if len(parts) >= 2:
+        extracted_text = parts[-1]
+        return extracted_text
+    else:
+        print("无法提取有效的部分")

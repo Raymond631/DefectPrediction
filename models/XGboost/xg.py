@@ -1,7 +1,7 @@
 import joblib
 from xgboost.sklearn import XGBClassifier
 
-from utils.common import model_evaluation, data_standard_scaler, data_split, read_arff
+from utils.common import model_evaluation, data_standard_scaler, data_split, read_arff, path_dataset_name
 
 
 def train_xgboost(X_train, y_train):
@@ -35,7 +35,7 @@ def xgboost(folder_path, bug_label):
     # 测试模型
     y_pred, y_prob = test_xgboost(X_test)
     # 模型评估
-    model_evaluation(y_test, y_pred, y_prob)
+    model_evaluation(y_test, y_pred, y_prob, f"XGboost : {path_dataset_name(folder_path)}")
 
 
 if __name__ == '__main__':

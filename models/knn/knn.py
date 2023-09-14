@@ -1,7 +1,7 @@
 import joblib
 from sklearn.neighbors import KNeighborsClassifier
 
-from utils.common import read_arff, data_standard_scaler, data_split, model_evaluation
+from utils.common import read_arff, data_standard_scaler, data_split, model_evaluation, path_dataset_name
 
 
 def train_knn(X_train, y_train):
@@ -35,7 +35,7 @@ def knn(folder_path, bug_label):
     # 测试模型
     y_pred, y_prob = test_knn(X_test)
     # 模型评估
-    model_evaluation(y_test, y_pred, y_prob)
+    model_evaluation(y_test, y_pred, y_prob, f"KNN : {path_dataset_name(folder_path)}")
 
 
 if __name__ == '__main__':
