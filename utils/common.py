@@ -1,13 +1,14 @@
 import glob
 import os
 import tkinter as tk
+import warnings
 
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from scipy.io import arff
-from sklearn.metrics import classification_report, roc_curve, roc_auc_score, confusion_matrix
+from sklearn.metrics import classification_report, roc_curve, roc_auc_score, confusion_matrix, f1_score, precision_score, recall_score, accuracy_score
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 
@@ -97,17 +98,19 @@ def model_evaluation(y_test, y_pred, y_prob, fig_title):
     @param y_pred: 预测结果
     @param y_prob: 预测概率
     """
+    warnings.filterwarnings('ignore')
+    
     # 打印预测结果
     print("预测结果：")
     print(y_pred)
 
-    # 生成分类报告
+    # 打印分类报告
     report = classification_report(y_test, y_pred, target_names=['clean', 'buggy'])
+    print(report)
 
     # 生成ROC曲线
     fpr, tpr, thresholds = roc_curve(y_test, y_prob)
     roc_auc = roc_auc_score(y_test, y_prob)
-
     # 生成混淆矩阵
     cm = confusion_matrix(y_test, y_pred)
 
@@ -131,9 +134,40 @@ def model_evaluation(y_test, y_pred, y_prob, fig_title):
     # 在整个图的最上方添加一个标题
     fig.suptitle(fig_title, fontsize=16)
 
-    # 在子图1中显示分类报告
-    axs[0, 0].text(0.1, 0.5, report, fontsize=12)
-    axs[0, 0].axis('off')
+    # 定义一系列阈值
+    thresholds = np.arange(0, 1.01, 0.01)
+    # 初始化用于存储性能指标的列表
+    f1_scores = []
+    precisions = []
+    recalls = []
+    accuracies = []
+    # 针对不同阈值计算性能指标
+    for threshold in thresholds:
+        y_pred = (y_prob >= threshold).astype(int)
+
+        f1 = f1_score(y_test, y_pred)
+        precision = precision_score(y_test, y_pred)
+        recall = recall_score(y_test, y_pred)
+        accuracy = accuracy_score(y_test, y_pred)
+
+        f1_scores.append(f1)
+        precisions.append(precision)
+        recalls.append(recall)
+        accuracies.append(accuracy)
+
+    # 绘制阈值曲线
+    axs[0, 0].plot(thresholds, f1_scores, label='F1 Score')
+    axs[0, 0].plot(thresholds, precisions, label='Precision')
+    axs[0, 0].plot(thresholds, recalls, label='Recall')
+    axs[0, 0].plot(thresholds, accuracies, label='Accuracy')
+    axs[0, 0].set_xlabel('Threshold')
+    axs[0, 0].set_ylabel('Performance Metric')
+    axs[0, 0].set_title('Threshold Curve for LR Model')
+    axs[0, 0].legend()
+    # 找到最佳阈值
+    best_threshold_index = np.argmax(f1_scores)
+    best_threshold = thresholds[best_threshold_index]
+    print("Best Threshold:", best_threshold)
 
     # 在子图2中显示ROC曲线
     axs[0, 1].plot(fpr, tpr, color='darkorange', lw=2, label='ROC curve (area = %0.2f)' % roc_auc)
