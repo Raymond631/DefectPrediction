@@ -15,7 +15,7 @@ def train_knn(X_train, y_train):
 
 def test_knn(X_test):
     # 加载模型
-    knn_model = joblib.load('../../out/svm.pkl')
+    knn_model = joblib.load('../../out/knn.pkl')
     # 使用模型进行预测
     y_pred = knn_model.predict(X_test)
     y_prob = knn_model.predict_proba(X_test)[:, 1]
@@ -39,4 +39,4 @@ def knn(folder_path, bug_label):
 
 
 if __name__ == '__main__':
-    knn('../../data/arff/AEEEM', b'buggy')
+    knn('../../data/arff/DPDATA', b'buggy')

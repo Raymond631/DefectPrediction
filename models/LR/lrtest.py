@@ -39,4 +39,4 @@ def lr(folder_path, bug_label):
 
 
 if __name__ == '__main__':
-    lr('../../data/arff/AEEEM', b'buggy')
+    lr('../../data/arff/DPDATA', b'buggy')

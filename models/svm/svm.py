@@ -39,4 +39,4 @@ def svm(folder_path, bug_label):
 
 
 if __name__ == '__main__':
-    svm('../../data/arff/AEEEM', b'buggy')
+    svm('../../data/arff/DPDATA', b'buggy')

@@ -45,4 +45,4 @@ def multilayer_perceptron(folder_path, bug_label):
 
 
 if __name__ == '__main__':
-    multilayer_perceptron('../../data/arff/AEEEM', b'buggy')
+    multilayer_perceptron('../../data/arff/DPDATA', b'buggy')

@@ -50,4 +50,4 @@ def decision_tree(folder_path, bug_label):
 
 
 if __name__ == '__main__':
-    decision_tree('../../data/arff/AEEEM', b'buggy')
+    decision_tree('../../data/arff/DPDATA', b'buggy')

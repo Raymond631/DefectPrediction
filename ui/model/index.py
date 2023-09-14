@@ -17,7 +17,7 @@ from models.random_forest.mdp_random import rf
 from models.svm.svm import svm
 
 # 全局变量
-data_set = "AEEEM"
+data_set = "DPDATA"
 # 可供选择的模型
 buttons_single = []
 buttons_single_texts = ["naive_bayes", "svm", "ADTree", "dt", "lr", "mlp", "adaboost", "xgboost", "random_forest",
@@ -153,8 +153,8 @@ label_title.pack(side='top')
 container_data_select = tk.Frame(root)
 label_data = tk.Label(root, text="数据选择")
 label_data.pack(side=tk.TOP)
-radio_var = tk.StringVar(value="AEEEM")
-radio_button1 = ttk.Radiobutton(container_data_select, text="AEEEM", variable=radio_var, value="AEEEM",
+radio_var = tk.StringVar(value="DPDATA")
+radio_button1 = ttk.Radiobutton(container_data_select, text="DPDATA", variable=radio_var, value="DPDATA",
                                 command=on_radio_button_click)
 radio_button1.pack(side=tk.LEFT, padx=5)
 radio_button2 = ttk.Radiobutton(container_data_select, text="MORPH", variable=radio_var, value="MORPH",

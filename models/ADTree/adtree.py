@@ -50,4 +50,4 @@ def ad_tree(folder_path, bug_label):
 
 
 if __name__ == '__main__':
-    ad_tree('../../data/arff/AEEEM', b'buggy')
+    ad_tree('../../data/arff/DPDATA', b'buggy')

@@ -40,4 +40,4 @@ def adaboost(folder_path, bug_label):
 
 
 if __name__ == '__main__':
-    adaboost('../../data/arff/AEEEM', b'buggy')
+    adaboost('../../data/arff/DPDATA', b'buggy')

@@ -39,4 +39,4 @@ def xgboost(folder_path, bug_label):
 
 
 if __name__ == '__main__':
-    xgboost('../../data/arff/AEEEM', b'buggy')
+    xgboost('../../data/arff/DPDATA', b'buggy')

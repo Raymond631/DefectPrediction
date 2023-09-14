@@ -40,4 +40,4 @@ def naive_bayes(folder_path, bug_label):
 
 if __name__ == '__main__':
     print('nb')
-    naive_bayes('../../data/arff/AEEEM', b'buggy')
+    naive_bayes('../../data/arff/DPDATA', b'buggy')
