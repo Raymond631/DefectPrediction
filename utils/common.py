@@ -119,7 +119,8 @@ def model_evaluation(y_test, y_pred, y_prob):
     # 创建Tkinter窗口
     root = tk.Tk()
     root.title("Matplotlib in Tkinter")
-
+    # 设置窗口大小
+    root.geometry("1200x800")
     # 创建一个框架以包含Matplotlib图
     frame = tk.Frame(root)
     frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
