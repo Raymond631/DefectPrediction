@@ -28,9 +28,9 @@ scipy==1.10.1
 six==1.16.0
 sympy==1.11.1
 threadpoolctl==3.2.0
+ttkbootstrap==1.10.1
 typing_extensions==4.4.0
 tzdata==2023.3
 urllib3==1.26.13
+xgboost==2.0.0
 zipp==3.16.2
-
-xgboost~=2.0.0
